@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="149.0" prefWidth="369.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="skvortsov.best.pupil.chat.client.controllers.AboutController">
+   <children>
+      <Label layoutX="10.0" layoutY="14.0" prefHeight="76.0" prefWidth="350.0" text="Приложение &quot;StarCHAT&quot; разработано на языке программирования Java (JavaFX) в 2022 году." textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="10.0" layoutY="101.0" prefHeight="20.0" prefWidth="350.0" text="Разработчик:  Игорь Скворцов, тел. +7(985)141-96-40" textAlignment="JUSTIFY">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>
