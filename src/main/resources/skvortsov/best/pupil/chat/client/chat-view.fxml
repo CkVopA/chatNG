@@ -1,16 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="skvortsov.best.pupil.chat.client.controllers.ChatController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="405.0" prefWidth="366.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="skvortsov.best.pupil.chat.client.controllers.ChatController">
+   <children>
+      <HBox layoutX="119.0" layoutY="363.0" prefHeight="38.0" prefWidth="246.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="119.0" AnchorPane.rightAnchor="2.0">
+         <children>
+            <TextField fx:id="inputField" onAction="#sendMessageToChatList" prefHeight="42.0" prefWidth="199.0" promptText="Текст сообщения">
+               <font>
+                  <Font name="System Italic" size="12.0" />
+               </font></TextField>
+            <Button mnemonicParsing="false" onAction="#sendMessageToChatList" prefHeight="38.0" prefWidth="48.0" text="Отправить">
+               <font>
+                  <Font size="7.0" />
+               </font></Button>
+         </children>
+      </HBox>
+      <MenuBar layoutX="4.0" layoutY="2.0" prefHeight="25.0" prefWidth="360.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Меню">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#exitApp" text="Закрыть программу" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Инструменты">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#clearChatList" text="Очистить историю переписки" />
+                  <MenuItem mnemonicParsing="false"  text=" Добавить новый контакт" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Помощь">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#about" text="О программе" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <ListView fx:id="listContacts" blendMode="DARKEN" layoutX="3.0" layoutY="48.0" prefHeight="354.0" prefWidth="114.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0">
+         <opaqueInsets>
+            <Insets bottom="1.0" top="1.0" />
+         </opaqueInsets>
+         <padding>
+            <Insets bottom="1.0" left="3.0" top="1.0" />
+         </padding></ListView>
+      <Label alignment="CENTER" layoutX="119.0" layoutY="29.0" prefHeight="18.0" prefWidth="246.0" text="Чат">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
+      <Label alignment="CENTER" layoutX="3.0" layoutY="29.0" prefHeight="18.0" prefWidth="114.0" text="Контакты">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
+      <TextArea fx:id="chatList" editable="false" focusTraversable="false" layoutX="119.0" layoutY="49.0" prefHeight="313.0" prefWidth="245.0" wrapText="true" AnchorPane.leftAnchor="119.0" AnchorPane.rightAnchor="2.0" />
+   </children>
+</AnchorPane>
