@@ -18,11 +18,11 @@
    <children>
       <HBox layoutX="119.0" layoutY="363.0" prefHeight="38.0" prefWidth="246.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="119.0" AnchorPane.rightAnchor="2.0">
          <children>
-            <TextField fx:id="inputField" onAction="#sendMessageToChatList" prefHeight="42.0" prefWidth="199.0" promptText="Текст сообщения">
+            <TextField fx:id="inputField" onAction="#sendMessage" prefHeight="42.0" prefWidth="199.0" promptText="Текст сообщения">
                <font>
                   <Font name="System Italic" size="12.0" />
                </font></TextField>
-            <Button mnemonicParsing="false" onAction="#sendMessageToChatList" prefHeight="38.0" prefWidth="48.0" text="Отправить">
+            <Button mnemonicParsing="false" fx:id="sendButton" onAction="#sendMessage" prefHeight="38.0" prefWidth="48.0" text="Отправить">
                <font>
                   <Font size="7.0" />
                </font></Button>
@@ -48,7 +48,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <ListView fx:id="listContacts" blendMode="DARKEN" layoutX="3.0" layoutY="48.0" prefHeight="354.0" prefWidth="114.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0">
+      <ListView fx:id="contactsList" blendMode="DARKEN" layoutX="3.0" layoutY="48.0" prefHeight="354.0" prefWidth="114.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0">
          <opaqueInsets>
             <Insets bottom="1.0" top="1.0" />
          </opaqueInsets>

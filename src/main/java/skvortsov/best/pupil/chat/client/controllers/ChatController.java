@@ -2,18 +2,13 @@ package skvortsov.best.pupil.chat.client.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import skvortsov.best.pupil.chat.client.StartClient;
+import skvortsov.best.pupil.chat.client.models.Network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,38 +16,40 @@ import java.util.ResourceBundle;
 public class ChatController implements Initializable {
 
     @FXML
+    public Button sendButton;
+    @FXML
     private TextField inputField;
 
     @FXML
     private TextArea chatList;
 
     @FXML
-    private ListView<String> listContacts;
+    private ListView<String> contactsList;
 
     private final ObservableList<String> contacts = FXCollections.observableArrayList(
             "Senior","Middle","Junior"
     );
 
-    @FXML
-    private TextField fieldNewContact;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        contactsList.setItems(contacts);
+        sendButton.setOnAction(actionEvent -> sendMessage());
+        inputField.setOnAction(actionEvent -> sendMessage());
+    }
 
     @FXML
-    public void sendMessageToChatList(){
-        String msg = inputField.getText();
+    public void sendMessage(){
+        String msg = inputField.getText().trim();
         inputField.clear();
         if (!msg.isBlank()) {
+            network.sendMessage(msg);
             appendMessage(msg);
         }
     }
 
-    private void appendMessage(String msg) {
-        //      try {
-        //          out.writeUTF(msg);
-        //      }
-        //      catch (IOException e) {
-        //          e.printStackTrace();
-        //      }
-        chatList.appendText(msg + "\n");
+    public void appendMessage(String msg) {
+        chatList.appendText(msg);
+        chatList.appendText(System.lineSeparator());
     }
 
     @FXML
@@ -70,9 +67,8 @@ public class ChatController implements Initializable {
         StartClient.windowAbout(new Stage());
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        listContacts.setItems(contacts);
-
+    private Network network;
+    public void setNetwork(Network network){
+        this.network = network;
     }
 }
