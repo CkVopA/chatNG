@@ -6,11 +6,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Scanner;
 
 public class ServerApp {
 
     public static final int SERVER_PORT = 8189;
-    private static DataInputStream in;
+    private static DataInputStream inS;
     private static DataOutputStream out;
 
     public static void main(String[] args) {
@@ -21,29 +22,50 @@ public class ServerApp {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Client is online!");
 
-                in = new DataInputStream(clientSocket.getInputStream());
+                inS = new DataInputStream(clientSocket.getInputStream());
                 out = new DataOutputStream(clientSocket.getOutputStream());
+
+
                 try {
-                    while (true) {
-                        String msg = in.readUTF();
-
-                        if (msg.equals("/stop")) {
-                            System.out.println("Server stopped");
-                            System.exit(0);
-                        }
-                        System.out.println("From client: " + msg);
-
-                        out.writeUTF("Me: " + msg);
-                    }
+                    msgFromServer();
+                    waitingMsgFromClient();
                 } catch (SocketException e) {
-                    clientSocket.close();
-                    System.out.println("Client is offline");
+                    e.printStackTrace();
+                    System.out.println("Client reset the connection");
                 }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    private static void waitingMsgFromClient() throws IOException {
+        while (true) {
+            String msg = inS.readUTF();
+            if (msg.equals("/stop")) {
+                System.out.println("Server stopped");
+                System.exit(0);
+            }
+            System.out.println("From client: " + msg);
+            out.writeUTF("Me: " + msg);
+        }
+    }
+
+    private static void msgFromServer() {
+        Thread tS = new Thread(()-> {
+        while (true) {
+            Scanner scanner = new Scanner(System.in);
+            String msgFromServer = scanner.nextLine();
+
+            try {
+                out.writeUTF("SERVER_MESSAGE: " + msgFromServer);
+                System.out.println("SERVER_MESSAGE: " + msgFromServer);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    });
+        tS.setDaemon(true);
+        tS.start();
     }
 }
