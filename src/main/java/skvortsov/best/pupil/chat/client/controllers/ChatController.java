@@ -43,7 +43,6 @@ public class ChatController implements Initializable {
         inputField.clear();
         if (!msg.isBlank()) {
             network.sendMessage(msg);
-            appendMessage(msg);
         }
     }
 
