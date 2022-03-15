@@ -27,6 +27,13 @@
         </dependency>
 
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.version}</version>
@@ -38,6 +45,7 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -61,7 +69,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                safronov.best.teacher.chat/skvortsov.best.pupil.chat.client.StartClient
+                                skvortsov.best.pupil.chat.client.StartClient
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

@@ -9,6 +9,16 @@ import java.net.Socket;
 import java.util.SimpleTimeZone;
 
 public class Network {
+
+    private static final String AUTH_CMD_PREFIX = "/auth"; // + login + password
+    private static final String AUTHOK_CMD_PREFIX = "/authok"; // + userName
+    private static final String AUTHERR_CMD_PREFIX = "/autherr"; // + errorMessage
+    private static final String CLIENT_MSG_CMD_PREFIX = "/cmsg"; // + message from client
+    private static final String SERVER_MSG_CMD_PREFIX = "/smsg"; // + message from server
+    private static final String PRIVATE_MSG_CMD_PREFIX = "/pmsg"; // + message
+    private static final String STOP_SERVER_CMD_PREFIX = "/stop"; // stop server
+    private static final String END_CLIENT_CMD_PREFIX = "/end";  // end session, close connection
+
     private final String DEFAULT_HOST = "localhost";
     private final int DEFAULT_PORT = 8189;
     private final String host;
