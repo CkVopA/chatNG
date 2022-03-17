@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class ServerApp {
 
-    public static final int SERVER_PORT = 8189;
+    public static final int SERVER_PORT = 8888;
     private static DataInputStream inS;
     private static DataOutputStream out;
 

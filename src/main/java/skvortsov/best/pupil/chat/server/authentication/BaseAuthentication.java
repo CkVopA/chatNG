@@ -14,8 +14,7 @@ public class BaseAuthentication implements AuthenticationService {
 
     @Override
     public String getUsernameByLoginAndPassword(String login, String password) {
-        for (User client :
-                clients) {
+        for (User client : clients) {
             if (client.getLogin().equals(login) && client.getPassword().equals(password)){
                 return client.getUsername();
             }

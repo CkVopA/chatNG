@@ -53,10 +53,6 @@ public class Network {
         }
     }
 
-    public DataOutputStream getOut() {
-        return out;
-    }
-
     public void sendMessage(String msg){
         try {
             out.writeUTF(msg);
@@ -70,8 +66,12 @@ public class Network {
         Thread t = new Thread(()-> {
             try {
                 while (true){
+                    if (socket==null){
+                        continue;
+                    }
                     String msg = in.readUTF();
                     chatController.appendMessage(msg);
+                    System.out.println(msg);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
