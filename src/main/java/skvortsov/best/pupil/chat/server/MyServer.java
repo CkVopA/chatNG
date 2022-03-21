@@ -100,10 +100,10 @@ public class MyServer {
         sendForAllButOne(clientOffline, msg);
     }
 
-    private synchronized void sendForAllButOne(ClientHandler clientHandler, String msg) throws IOException {
+    public synchronized void sendForAllButOne(ClientHandler clientHandler, String msg) throws IOException {
         for (ClientHandler client : clients) {
             if (client == clientHandler) {
-                return;
+                continue;
             }
             client.sendServerMessage(msg);
         }

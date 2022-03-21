@@ -11,6 +11,8 @@ import skvortsov.best.pupil.chat.client.models.Network;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class ChatController implements Initializable {
@@ -19,6 +21,9 @@ public class ChatController implements Initializable {
     public Button sendButton;
     @FXML
     private TextField inputField;
+
+    @FXML
+    private Label usernameLabel;
 
     @FXML
     private TextArea chatList;
@@ -47,7 +52,17 @@ public class ChatController implements Initializable {
     }
 
     public void appendMessage(String msg) {
+        String timeStamp = DateFormat.getInstance().format(new Date());
+        chatList.appendText(timeStamp);
+        chatList.appendText(System.lineSeparator());
         chatList.appendText(msg);
+        chatList.appendText(System.lineSeparator());
+    }
+
+    public void appendServerMessage(String serverMessage) {
+        chatList.appendText(System.lineSeparator());
+        chatList.appendText(">>> "+ serverMessage + " <<<");
+        chatList.appendText(System.lineSeparator());
         chatList.appendText(System.lineSeparator());
     }
 
@@ -62,11 +77,16 @@ public class ChatController implements Initializable {
     }
 
     @FXML
+    public void setUsernameLabel(String username){
+        this.usernameLabel.setText(username);
+    }
+
+    @FXML
     public void about() throws IOException {
         StartClient.windowAbout(new Stage());
     }
-
     private Network network;
+
     public void setNetwork(Network network){
         this.network = network;
     }

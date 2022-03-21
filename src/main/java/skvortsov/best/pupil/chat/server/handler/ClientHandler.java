@@ -77,7 +77,7 @@ public class ClientHandler {
                 out.writeUTF(AUTHERR_CMD_PREFIX + " Login ["+ login +"] is busy!");
                 return false;
             }
-            out.writeUTF(AUTHOK_CMD_PREFIX + " Authentication ["+ username +"] success!");
+            out.writeUTF(String.format("%s %s", AUTHOK_CMD_PREFIX, username));
             myServer.subscribe(this);
             myServer.clientIsOnlineMessage(this);
             return true;
@@ -105,14 +105,14 @@ public class ClientHandler {
                     String msg = "Client [" + this.getUsername() + "] stopped this server.\n" +
                             "Connection is lost!";
                     System.out.println(msg);
-                    myServer.broadcastMessage(msg, this);
+                    myServer.sendForAllButOne(this, msg);
 
                     System.exit(0);
 
                 } else if (message.startsWith(END_CLIENT_CMD_PREFIX)){
                     out.writeUTF(message);
                     myServer.clientIsOfflineMessage(this);
-                    String msg = "You are offline.";
+                    String msg = "You are offline."; //TODO
                     out.writeUTF(msg);
                     myServer.unSubscribe(this);
                     return;
@@ -141,10 +141,10 @@ public class ClientHandler {
     }
 
     public void sendMessagePrivate(String senderName, String message) throws IOException {
-        out.writeUTF(String.format("[%s]: * { %s }",senderName,message));
+        out.writeUTF(String.format("[%s]: * { %s }",senderName.toUpperCase(),message));
     }
 
     public void sendServerMessage(String message) throws IOException {
-        out.writeUTF(String.format("%s - <%s>.", SERVER_MSG_CMD_PREFIX, message));
+        out.writeUTF(String.format("%s %s", SERVER_MSG_CMD_PREFIX, message));
     }
 }

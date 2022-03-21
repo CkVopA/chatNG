@@ -8,7 +8,8 @@
 <?import javafx.scene.text.Font?>
 
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="254.0" prefWidth="410.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="254.0" prefWidth="410.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+                fx:controller="skvortsov.best.pupil.chat.client.controllers.RegOrAuthController">
    <top>
       <Label prefHeight="63.0" prefWidth="331.0" text="Добро пожаловать в чат Next Generation!" BorderPane.alignment="CENTER">
          <font>

@@ -8,7 +8,8 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="270.0" prefWidth="466.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="270.0" prefWidth="466.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="skvortsov.best.pupil.chat.client.controllers.RegController">
    <children>
       <Button fx:id="registrationButtun" layoutX="149.0" layoutY="208.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="175.0" text="REGISTRATION!">
          <font>

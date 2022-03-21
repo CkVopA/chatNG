@@ -62,5 +62,6 @@
             <Font name="System Bold" size="12.0" />
          </font></Label>
       <TextArea fx:id="chatList" editable="false" focusTraversable="false" layoutX="119.0" layoutY="49.0" prefHeight="313.0" prefWidth="245.0" wrapText="true" AnchorPane.leftAnchor="119.0" AnchorPane.rightAnchor="2.0" />
+      <Label fx:id="usernameLabel" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="265.0" layoutY="30.0" prefHeight="18.0" prefWidth="98.0" text="Secret_agent" textAlignment="RIGHT" textOverrun="LEADING_ELLIPSIS" />
    </children>
 </AnchorPane>

@@ -1,5 +1,6 @@
 package skvortsov.best.pupil.chat.client.models;
 
+import javafx.application.Platform;
 import skvortsov.best.pupil.chat.client.controllers.ChatController;
 
 import java.io.DataInputStream;
@@ -13,9 +14,9 @@ public class Network {
     private static final String AUTH_CMD_PREFIX = "/auth"; // + login + password
     private static final String AUTHOK_CMD_PREFIX = "/authok"; // + userName
     private static final String AUTHERR_CMD_PREFIX = "/autherr"; // + errorMessage
-    private static final String CLIENT_MSG_CMD_PREFIX = "/cmsg"; // + message from client
-    private static final String SERVER_MSG_CMD_PREFIX = "/smsg"; // + message from server
-    private static final String PRIVATE_MSG_CMD_PREFIX = "/pmsg"; // + message
+    private static final String CLIENT_MSG_CMD_PREFIX = "/cm"; // + message from client
+    private static final String SERVER_MSG_CMD_PREFIX = "/sm"; // + message from server
+    private static final String PRIVATE_MSG_CMD_PREFIX = "/pm"; // + message
     private static final String STOP_SERVER_CMD_PREFIX = "/stop"; // stop server
     private static final String END_CLIENT_CMD_PREFIX = "/end";  // end session, close connection
 
@@ -27,6 +28,7 @@ public class Network {
 
     private DataInputStream in;
     private DataOutputStream out;
+    private String username;
 
 
     public Network() {
@@ -71,9 +73,28 @@ public class Network {
         Thread t = new Thread(()-> {
             try {
                 while (true){
-                    if (socket==null) waitMessage(chatController);
+ //                   if (socket==null) waitMessage(chatController);
+
                     String msg = in.readUTF();
-                    chatController.appendMessage(msg);
+
+                    if (msg.startsWith(CLIENT_MSG_CMD_PREFIX)){
+                        String[] parts = msg.split("\\s+", 3);
+                        String sender = parts[1];
+                        String messageFromSender = parts[2];
+
+                        Platform.runLater(()-> {
+                            chatController.appendMessage(String.format("[%s]: '%s'",sender, messageFromSender));
+                        });
+                    }else if (msg.startsWith(SERVER_MSG_CMD_PREFIX)){
+                        String[] parts = msg.split("\\s+", 2);
+                        String serverMessage = parts[1];
+
+                        Platform.runLater(()-> {
+                            chatController.appendServerMessage(serverMessage);
+                        });
+                    } else {
+                        chatController.appendMessage(msg);
+                    }
                     System.out.println(msg);
                 }
             } catch (IOException e) {
@@ -82,5 +103,25 @@ public class Network {
         });
         t.setDaemon(true);
         t.start();
+    }
+
+    public String sendAuthMessage(String login, String password) {
+        try {
+            out.writeUTF(String.format("%s %s %s", AUTH_CMD_PREFIX, login, password));
+            String response = in.readUTF();
+            if (response.startsWith(AUTHOK_CMD_PREFIX)){
+                this.username = response.split("\\s+",2)[1];
+                return null;
+            } else {
+                return response.split("\\s+",2)[1];
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+    }
+
+    public String getUsername() {
+        return username;
     }
 }
