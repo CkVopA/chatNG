@@ -85,17 +85,17 @@ public class MyServer {
     public synchronized void privateMessage(ClientHandler sender, String recipient, String msg) throws IOException {
         for (ClientHandler client : clients) {
             if (client.getUsername().equals(recipient)) {
-                client.sendMessagePrivate(sender, msg);
+                client.sendMessagePrivate(sender.getUsername(), msg);
             }
         }
     }
 
-    public synchronized void clientIsOnlineMessage(ClientHandler newClient) throws IOException {
+    public void clientIsOnlineMessage(ClientHandler newClient) throws IOException {
         String msg = "Client [" + newClient.getUsername() + "] is online.";
         sendForAllButOne(newClient, msg);
     }
 
-    public synchronized void clientIsOfflineMessage(ClientHandler clientOffline) throws IOException {
+    public void clientIsOfflineMessage(ClientHandler clientOffline) throws IOException {
         String msg = "Client [" + clientOffline.getUsername() + "] is offline.";
         sendForAllButOne(clientOffline, msg);
     }

@@ -13,8 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="405.0" prefWidth="366.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="skvortsov.best.pupil.chat.client.controllers.ChatController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="405.0" prefWidth="366.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="skvortsov.best.pupil.chat.client.controllers.ChatController">
    <children>
       <HBox layoutX="119.0" layoutY="363.0" prefHeight="38.0" prefWidth="246.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="119.0" AnchorPane.rightAnchor="2.0">
          <children>
@@ -22,7 +21,7 @@
                <font>
                   <Font name="System Italic" size="12.0" />
                </font></TextField>
-            <Button mnemonicParsing="false" fx:id="sendButton" onAction="#sendMessage" prefHeight="38.0" prefWidth="48.0" text="Отправить">
+            <Button fx:id="sendButton" mnemonicParsing="false" onAction="#sendMessage" prefHeight="38.0" prefWidth="48.0" text="Отправить">
                <font>
                   <Font size="7.0" />
                </font></Button>
@@ -38,7 +37,6 @@
           <Menu mnemonicParsing="false" text="Инструменты">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#clearChatList" text="Очистить историю переписки" />
-                  <MenuItem mnemonicParsing="false"  text=" Добавить новый контакт" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Помощь">

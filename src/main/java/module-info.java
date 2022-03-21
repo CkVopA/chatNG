@@ -1,4 +1,4 @@
-module safronov.best.teacher.chat {
+module gb {
     requires javafx.controls;
     requires javafx.fxml;
 

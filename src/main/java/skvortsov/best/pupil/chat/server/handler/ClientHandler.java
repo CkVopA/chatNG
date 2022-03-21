@@ -18,9 +18,9 @@ public class ClientHandler {
     private static final String AUTH_CMD_PREFIX = "/auth"; // + login + password
     private static final String AUTHOK_CMD_PREFIX = "/authok"; // + userName
     private static final String AUTHERR_CMD_PREFIX = "/autherr"; // + errorMessage
-    private static final String CLIENT_MSG_CMD_PREFIX = "/cmsg"; // + message from client
-    private static final String SERVER_MSG_CMD_PREFIX = "/smsg"; // + message from server
-    private static final String PRIVATE_MSG_CMD_PREFIX = "/pmsg"; // + message
+    private static final String CLIENT_MSG_CMD_PREFIX = "/cm"; // + message from client
+    private static final String SERVER_MSG_CMD_PREFIX = "/sm"; // + message from server
+    private static final String PRIVATE_MSG_CMD_PREFIX = "/pm"; // + message
     private static final String STOP_SERVER_CMD_PREFIX = "/stop"; // stop server
     private static final String END_CLIENT_CMD_PREFIX = "/end";  // end session, close connection
     private String username;
@@ -94,33 +94,36 @@ public class ClientHandler {
 
     private void readMessage() throws IOException {
         while (true){
-            String message = inS.readUTF();
+                String message = inS.readUTF();
 
-            System.out.println("Message from ["+ getUsername()+ "] | - "+ message);
-            if (message.startsWith(STOP_SERVER_CMD_PREFIX)){
-                out.writeUTF(message);
-                out.writeUTF("You are stopped this server!\n" +
-                        "Connection is lost!");
+                System.out.println("Message from ["+ getUsername()+ "] | - "+ message);
+                if (message.startsWith(STOP_SERVER_CMD_PREFIX)){
+                    out.writeUTF(message);
+                    out.writeUTF("You are stopped this server!\n" +
+                            "Connection is lost!");
 
-                String msg = "Client [" + this.getUsername() + "] stopped this server.\n" +
-                        "Connection is lost!";
-                System.out.println(msg);
+                    String msg = "Client [" + this.getUsername() + "] stopped this server.\n" +
+                            "Connection is lost!";
+                    System.out.println(msg);
+                    myServer.broadcastMessage(msg, this);
 
+                    System.exit(0);
 
-                System.exit(0);
-            } else if (message.startsWith(END_CLIENT_CMD_PREFIX)){
-                out.writeUTF(message);
-                myServer.clientIsOfflineMessage(this);
-                String msg = "You are offline.";
-                out.writeUTF(msg);
-                myServer.unSubscribe(this);
-                return;
-            }  else if (message.startsWith(PRIVATE_MSG_CMD_PREFIX)){
-                readAndSendPrivateMessage(message);
-            } else {
-                myServer.broadcastMessage(message, this);
-                out.writeUTF("Me: " + message);
-            }
+                } else if (message.startsWith(END_CLIENT_CMD_PREFIX)){
+                    out.writeUTF(message);
+                    myServer.clientIsOfflineMessage(this);
+                    String msg = "You are offline.";
+                    out.writeUTF(msg);
+                    myServer.unSubscribe(this);
+                    return;
+
+                }  else if (message.startsWith(PRIVATE_MSG_CMD_PREFIX)){
+                    readAndSendPrivateMessage(message);
+
+                } else {
+                    myServer.broadcastMessage(message, this);
+                    out.writeUTF("Me: " + message);
+                }
         }
     }
 
@@ -137,8 +140,8 @@ public class ClientHandler {
         myServer.privateMessage(this, recipient, privateMessage);
     }
 
-    public void sendMessagePrivate(ClientHandler sender, String message) throws IOException {
-        out.writeUTF(String.format("[%s]: * { %s }",sender.getUsername(),message));
+    public void sendMessagePrivate(String senderName, String message) throws IOException {
+        out.writeUTF(String.format("[%s]: * { %s }",senderName,message));
     }
 
     public void sendServerMessage(String message) throws IOException {

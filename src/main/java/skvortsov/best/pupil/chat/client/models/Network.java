@@ -56,6 +56,11 @@ public class Network {
     public void sendMessage(String msg){
         try {
             out.writeUTF(msg);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Message is not send");
@@ -66,9 +71,7 @@ public class Network {
         Thread t = new Thread(()-> {
             try {
                 while (true){
-                    if (socket==null){
-                        continue;
-                    }
+                    if (socket==null) waitMessage(chatController);
                     String msg = in.readUTF();
                     chatController.appendMessage(msg);
                     System.out.println(msg);

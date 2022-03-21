@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="214.0" prefWidth="407.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label focusTraversable="false" layoutX="83.0" layoutY="14.0" prefHeight="47.0" prefWidth="240.0" text="Для входа в чат, введите логин и пароль, чтобы авторизироваться" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="signInButton" layoutX="125.0" layoutY="160.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="156.0" text="Войти в чат" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <TextField fx:id="loginField" layoutX="110.0" layoutY="80.0" prefHeight="26.0" prefWidth="186.0" promptText="Enter login" AnchorPane.bottomAnchor="104.4">
+         <font>
+            <Font name="System Italic" size="14.0" />
+         </font>
+      </TextField>
+      <PasswordField fx:id="passwordField" layoutX="110.0" layoutY="107.0" prefHeight="26.0" prefWidth="186.0" promptText="Enter password" AnchorPane.bottomAnchor="77.4">
+         <font>
+            <Font name="System Italic" size="14.0" />
+         </font>
+      </PasswordField>
+      <Label layoutX="58.0" layoutY="85.0" prefHeight="18.0" prefWidth="50.0" text="Логин:" />
+      <Label layoutX="57.0" layoutY="112.0" prefHeight="18.0" prefWidth="50.0" text="Пароль:" />
+   </children>
+</AnchorPane>

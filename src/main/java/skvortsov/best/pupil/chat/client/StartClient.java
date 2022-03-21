@@ -1,6 +1,7 @@
 package skvortsov.best.pupil.chat.client;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,6 +17,7 @@ public class StartClient extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(StartClient.class.getResource("chat-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 //        Scene scene = new Scene(loadFXML("chat-view"));
+
         stage.setTitle("Chat NextGEN!");
         stage.setScene(scene);
         stage.show();
@@ -27,7 +29,6 @@ public class StartClient extends Application {
 
         network.connect();
         network.waitMessage(chatController);
-
 
     }
     private static Parent loadFXML(String fxml) throws IOException {

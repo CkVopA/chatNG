@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="254.0" prefWidth="410.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <Label prefHeight="63.0" prefWidth="331.0" text="Добро пожаловать в чат Next Generation!" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+   </top>
+   <center>
+      <SplitPane dividerPositions="0.5" prefHeight="191.0" prefWidth="49.0" BorderPane.alignment="CENTER">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="190.0" prefWidth="198.0">
+               <children>
+                  <Button fx:id="regButton" layoutX="43.0" layoutY="107.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="119.0" text="Регистрация">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
+                  <Label layoutX="11.0" layoutY="14.0" prefHeight="79.0" prefWidth="178.0" text="Если впервые в нашем приложении, нажмите кнопку &quot;Регистрация&quot;, чтобы создать нового пользователя." textAlignment="CENTER" wrapText="true" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="190.0" prefWidth="210.0">
+               <children>
+                  <Button fx:id="authButton" layoutX="43.0" layoutY="107.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="119.0" text="Авторизация">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
+                  <Label layoutX="11.0" layoutY="14.0" prefHeight="79.0" prefWidth="178.0" text="Если вы уже зарегистрированы в нашем приложении, нажмите кнопку &quot;Авторизация&quot;." textAlignment="CENTER" wrapText="true" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </center>
+</BorderPane>
