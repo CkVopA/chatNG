@@ -1,10 +1,12 @@
 package skvortsov.best.pupil.chat.client.controllers;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import skvortsov.best.pupil.chat.client.StartClient;
 import skvortsov.best.pupil.chat.client.models.Network;
@@ -31,15 +33,42 @@ public class ChatController implements Initializable {
     @FXML
     private ListView<String> contactsList;
 
-    private final ObservableList<String> contacts = FXCollections.observableArrayList(
-            "Senior","Middle","Junior"
+    private  ObservableList<String> contacts = FXCollections.observableArrayList(
+  //          "Senior","Middle","Junior","HR"
+
     );
 
+    private String selectedRecipient;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        contactsList.setItems(contacts);
         sendButton.setOnAction(actionEvent -> sendMessage());
         inputField.setOnAction(actionEvent -> sendMessage());
+        contactsList.setItems(contacts);
+
+        chooseContactsListForPrivateMessage();
+    }
+
+    private void chooseContactsListForPrivateMessage() {
+        contactsList.setCellFactory(lv -> {
+            MultipleSelectionModel<String> selectionModel = contactsList.getSelectionModel();
+            ListCell<String> cell = new ListCell<>();
+            cell.textProperty().bind(cell.itemProperty());
+            cell.addEventFilter(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
+                    chatList.requestFocus();
+                    if (!cell.isEmpty()){
+                        int index = cell.getIndex();
+                        if (selectionModel.getSelectedIndices().contains(index)){
+                            selectionModel.clearSelection(index);
+                            selectedRecipient = null;
+                        }else {
+                            selectionModel.select(index);
+                            selectedRecipient = cell.getItem();
+                        }
+                        mouseEvent.consume();
+                    }
+            });
+            return cell;
+        });
     }
 
     @FXML
@@ -47,7 +76,11 @@ public class ChatController implements Initializable {
         String msg = inputField.getText().trim();
         inputField.clear();
         if (!msg.isBlank()) {
-            network.sendMessage(msg);
+            if (selectedRecipient != null){
+                network.sendPrivateMessage(selectedRecipient, msg);
+            } else {
+                network.sendMessage(msg);
+            }
         }
     }
 
@@ -64,6 +97,13 @@ public class ChatController implements Initializable {
         chatList.appendText(">>> "+ serverMessage + " <<<");
         chatList.appendText(System.lineSeparator());
         chatList.appendText(System.lineSeparator());
+    }
+
+    public void addUserInList(String user) {
+        Platform.runLater(()-> {
+            contactsList.getItems().add(user);
+        });
+
     }
 
     @FXML

@@ -1,5 +1,6 @@
 package skvortsov.best.pupil.chat.server;
 
+import javafx.application.Platform;
 import skvortsov.best.pupil.chat.server.authentication.AuthenticationService;
 import skvortsov.best.pupil.chat.server.authentication.BaseAuthentication;
 import skvortsov.best.pupil.chat.server.handler.ClientHandler;
@@ -20,14 +21,6 @@ public class MyServer {
         serverSocket = new ServerSocket(port);
         authenticationService = new BaseAuthentication();
         clients = new ArrayList<>();
-    }
-
-    public synchronized void subscribe(ClientHandler clientHandler) {
-        clients.add(clientHandler);
-    }
-
-    public synchronized void unSubscribe(ClientHandler clientHandler) {
-        clients.remove(clientHandler);
     }
 
     public void start() {
@@ -73,6 +66,16 @@ public class MyServer {
         return false;
     }
 
+    public synchronized void subscribe(ClientHandler clientHandler) throws IOException {
+        clients.add(clientHandler);
+        System.out.println(clients);
+    }
+
+    public synchronized void unSubscribe(ClientHandler clientHandler) {
+        clients.remove(clientHandler);
+        System.out.println(clients);
+    }
+
     public synchronized void broadcastMessage(String message, ClientHandler sender) throws IOException {
         for (ClientHandler client : clients) {
             if (client == sender) {
@@ -90,22 +93,34 @@ public class MyServer {
         }
     }
 
-    public void clientIsOnlineMessage(ClientHandler newClient) throws IOException {
+    public  void clientIsOnlineMessage(ClientHandler newClient) throws IOException {
         String msg = "Client [" + newClient.getUsername() + "] is online.";
-        sendForAllButOne(newClient, msg);
+        sendServerMessageForAllButOne(newClient, msg);
+        sendNewClientMessageForAllButOne(newClient, newClient.getUsername());
     }
 
     public void clientIsOfflineMessage(ClientHandler clientOffline) throws IOException {
         String msg = "Client [" + clientOffline.getUsername() + "] is offline.";
-        sendForAllButOne(clientOffline, msg);
+        sendServerMessageForAllButOne(clientOffline, msg);
     }
 
-    public synchronized void sendForAllButOne(ClientHandler clientHandler, String msg) throws IOException {
+    public synchronized void sendServerMessageForAllButOne(ClientHandler clientHandler, String msg) throws IOException {
         for (ClientHandler client : clients) {
             if (client == clientHandler) {
                 continue;
             }
             client.sendServerMessage(msg);
+        }
+        System.out.println(msg);
+    }
+
+
+    public synchronized void sendNewClientMessageForAllButOne(ClientHandler clientHandler, String msg) throws IOException {
+        for (ClientHandler client : clients) {
+            if (client == clientHandler) {
+                continue;
+            }
+            client.sendNewClientOnline(msg);
         }
         System.out.println(msg);
     }

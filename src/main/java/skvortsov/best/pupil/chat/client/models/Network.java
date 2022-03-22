@@ -1,6 +1,7 @@
 package skvortsov.best.pupil.chat.client.models;
 
 import javafx.application.Platform;
+import skvortsov.best.pupil.chat.client.StartClient;
 import skvortsov.best.pupil.chat.client.controllers.ChatController;
 
 import java.io.DataInputStream;
@@ -19,6 +20,8 @@ public class Network {
     private static final String PRIVATE_MSG_CMD_PREFIX = "/pm"; // + message
     private static final String STOP_SERVER_CMD_PREFIX = "/stop"; // stop server
     private static final String END_CLIENT_CMD_PREFIX = "/end";  // end session, close connection
+    private static final String ONLINE_CLIENT_CMD_PREFIX = "/con";  // + userName
+    private static final String OFFLINE_CLIENT_CMD_PREFIX = "/coff";  // + userName
 
     private final String DEFAULT_HOST = "localhost";
     private final int DEFAULT_PORT = 8189;
@@ -29,6 +32,7 @@ public class Network {
     private DataInputStream in;
     private DataOutputStream out;
     private String username;
+    private StartClient startClient;
 
 
     public Network() {
@@ -51,6 +55,7 @@ public class Network {
 
         } catch (IOException e) {
             e.printStackTrace();
+            startClient.showErrorAlert("Ошибка связи!", "Соединение потеряно!");
             System.out.println("Connection failed");
         }
     }
@@ -65,6 +70,7 @@ public class Network {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            startClient.showErrorAlert("Ошибка!", "Сообщение не передано!");
             System.out.println("Message is not send");
         }
     }
@@ -73,8 +79,6 @@ public class Network {
         Thread t = new Thread(()-> {
             try {
                 while (true){
- //                   if (socket==null) waitMessage(chatController);
-
                     String msg = in.readUTF();
 
                     if (msg.startsWith(CLIENT_MSG_CMD_PREFIX)){
@@ -92,8 +96,18 @@ public class Network {
                         Platform.runLater(()-> {
                             chatController.appendServerMessage(serverMessage);
                         });
-                    } else {
-                        chatController.appendMessage(msg);
+                    } else if (msg.startsWith(ONLINE_CLIENT_CMD_PREFIX)){
+                        String newUserIsOnline = msg.split("\\s+", 2)[1];
+                        //TODO
+
+                        chatController.addUserInList(newUserIsOnline);
+                        System.out.println(newUserIsOnline);
+
+
+                    }else {
+                        Platform.runLater(()-> {
+                            chatController.appendMessage(msg);
+                        });
                     }
                     System.out.println(msg);
                 }
@@ -123,5 +137,9 @@ public class Network {
 
     public String getUsername() {
         return username;
+    }
+
+    public void sendPrivateMessage(String selectedRecipient, String msg) {
+        sendMessage(String.format("%s %s %s", PRIVATE_MSG_CMD_PREFIX, selectedRecipient, msg));
     }
 }

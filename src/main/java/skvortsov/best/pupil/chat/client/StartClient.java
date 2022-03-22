@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import skvortsov.best.pupil.chat.client.controllers.AuthController;
@@ -29,9 +30,6 @@ public class StartClient extends Application {
 
         openAuthDialog();
         createChatDialog();
-
-
-
     }
 
     private void openRegOrAuthDialog() {
@@ -56,7 +54,6 @@ public class StartClient extends Application {
     private void createChatDialog() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(StartClient.class.getResource("chat-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-//        stage.setTitle("Chat NextGEN!");
         primaryStage.setScene(scene);
 
         chatController = fxmlLoader.getController();
@@ -85,5 +82,12 @@ public class StartClient extends Application {
         primaryStage.setTitle("Chat NextGEN! - " + network.getUsername());
         network.waitMessage(chatController);
         chatController.setUsernameLabel(network.getUsername());
+    }
+
+    public void showErrorAlert(String title, String errorMessage){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(errorMessage);
+        alert.show();
     }
 }

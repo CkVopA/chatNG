@@ -34,7 +34,7 @@ public class AuthController {
         String password = passwordField.getText().trim();
 
         if (login.length() == 0 || password.length() == 0){
-            System.out.println("!!!! Поля не должны быть пустыми"); //TODO
+            startClient.showErrorAlert("Ошибка ввода данных!", "Поля не должны быть пустыми!");
             return;
         }
 
@@ -43,7 +43,7 @@ public class AuthController {
         if (authErrorMessage == null){
             startClient.openChatDialog();
         } else {
-            System.out.println(" ! ! ! " + authErrorMessage);
+            startClient.showErrorAlert("Ошибка аутентификации!", authErrorMessage);
         }
     }
 
