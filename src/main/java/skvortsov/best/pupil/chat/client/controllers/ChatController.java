@@ -14,8 +14,7 @@ import skvortsov.best.pupil.chat.client.models.Network;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
-import java.util.Date;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ChatController implements Initializable {
 
@@ -99,13 +98,6 @@ public class ChatController implements Initializable {
         chatList.appendText(System.lineSeparator());
     }
 
-    public void addUserInList(String user) {
-        Platform.runLater(()-> {
-            contactsList.getItems().add(user);
-        });
-
-    }
-
     @FXML
     public void clearChatList(){
         chatList.clear();
@@ -129,5 +121,17 @@ public class ChatController implements Initializable {
 
     public void setNetwork(Network network){
         this.network = network;
+    }
+
+    public void updateContactsList(String[] users) {
+        Arrays.sort(users);
+        for (int i = 0; i < users.length; i++) {
+            if (users[i].equals(network.getUsername())){
+                users[i] = "> "+ users[i] + " <";
+            }
+        }
+        contactsList.getItems().clear();
+        Collections.addAll(contactsList.getItems(), users);
+
     }
 }

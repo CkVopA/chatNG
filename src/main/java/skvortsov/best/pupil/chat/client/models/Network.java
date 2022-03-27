@@ -97,16 +97,15 @@ public class Network {
                             chatController.appendServerMessage(serverMessage);
                         });
                     } else if (msg.startsWith(ONLINE_CLIENT_CMD_PREFIX)){
-                        String newUserIsOnline = msg.split("\\s+", 2)[1];
-                        //TODO
+                        msg = msg.substring(msg.indexOf('[') + 1, msg.indexOf(']'));
+                        String[] users = msg.split(", ");
 
-                        chatController.addUserInList(newUserIsOnline);
-                        System.out.println(newUserIsOnline);
-
-
-                    }else {
+                        Platform.runLater(()-> chatController.updateContactsList(users));
+                    }
+                    else {
+                        String finalMsg = msg;
                         Platform.runLater(()-> {
-                            chatController.appendMessage(msg);
+                            chatController.appendMessage(finalMsg);
                         });
                     }
                     System.out.println(msg);
@@ -140,6 +139,7 @@ public class Network {
     }
 
     public void sendPrivateMessage(String selectedRecipient, String msg) {
-        sendMessage(String.format("%s %s %s", PRIVATE_MSG_CMD_PREFIX, selectedRecipient, msg));
+        sendMessage(String.format("             %s %s %s", PRIVATE_MSG_CMD_PREFIX, selectedRecipient, msg));
     }
+
 }

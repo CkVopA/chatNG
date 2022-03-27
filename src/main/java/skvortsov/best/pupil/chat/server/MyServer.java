@@ -1,6 +1,5 @@
 package skvortsov.best.pupil.chat.server;
 
-import javafx.application.Platform;
 import skvortsov.best.pupil.chat.server.authentication.AuthenticationService;
 import skvortsov.best.pupil.chat.server.authentication.BaseAuthentication;
 import skvortsov.best.pupil.chat.server.handler.ClientHandler;
@@ -93,20 +92,13 @@ public class MyServer {
         }
     }
 
-    public  void clientIsOnlineMessage(ClientHandler newClient) throws IOException {
-        String msg = "Client [" + newClient.getUsername() + "] is online.";
-        sendServerMessageForAllButOne(newClient, msg);
-        sendNewClientMessageForAllButOne(newClient, newClient.getUsername());
-    }
+    public synchronized void sendOnlineMessage(ClientHandler clientOn) throws IOException {
 
-    public void clientIsOfflineMessage(ClientHandler clientOffline) throws IOException {
-        String msg = "Client [" + clientOffline.getUsername() + "] is offline.";
-        sendServerMessageForAllButOne(clientOffline, msg);
-    }
+        String msg = "Client [" + clientOn.getUsername() + "] is online.";
 
-    public synchronized void sendServerMessageForAllButOne(ClientHandler clientHandler, String msg) throws IOException {
         for (ClientHandler client : clients) {
-            if (client == clientHandler) {
+            client.sendClientsList(clients);
+            if (client == clientOn) {
                 continue;
             }
             client.sendServerMessage(msg);
@@ -114,13 +106,24 @@ public class MyServer {
         System.out.println(msg);
     }
 
+    public synchronized void sendOfflineMessage(ClientHandler clientOff) throws IOException {
+        String msg = "Client [" + clientOff.getUsername() + "] is offline.";
 
-    public synchronized void sendNewClientMessageForAllButOne(ClientHandler clientHandler, String msg) throws IOException {
         for (ClientHandler client : clients) {
-            if (client == clientHandler) {
+            if (client == clientOff){continue;}
+
+            client.sendServerMessage(msg);
+            client.sendClientsList(clients);
+        }
+        System.out.println(msg);
+    }
+
+    public synchronized void sendServerMessageForAllButOne(ClientHandler sender, String msg) throws IOException {
+        for (ClientHandler client : clients) {
+            if (client == sender) {
                 continue;
             }
-            client.sendNewClientOnline(msg);
+            client.sendServerMessage(msg);
         }
         System.out.println(msg);
     }

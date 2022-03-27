@@ -7,6 +7,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
 
 public class ClientHandler {
 
@@ -44,6 +45,11 @@ public class ClientHandler {
             } catch (IOException e) {
                 e.printStackTrace();
                 myServer.unSubscribe(this);
+                try {
+                    myServer.sendOfflineMessage(this);
+                } catch (IOException io) {
+                    io.printStackTrace();
+                }
             }
         }).start();
     }
@@ -81,9 +87,7 @@ public class ClientHandler {
                 return false;
             }
             out.writeUTF(String.format("%s %s", AUTHOK_CMD_PREFIX, username));
-            myServer.subscribe(this);
-            myServer.clientIsOnlineMessage(this);
-//            myServer.sendNewClientMessageForAllButOne(this, username);
+            joiningClient();
 
             return true;
         }
@@ -91,6 +95,11 @@ public class ClientHandler {
             out.writeUTF(AUTHERR_CMD_PREFIX + " WRONG login or password!");
             return false;
         }
+    }
+
+    private void joiningClient() throws IOException {
+        myServer.subscribe(this);
+        myServer.sendOnlineMessage(this);
     }
 
     public String getUsername() {
@@ -116,17 +125,14 @@ public class ClientHandler {
 
                 } else if (message.startsWith(END_CLIENT_CMD_PREFIX)){
                     out.writeUTF(message);
-                    myServer.clientIsOfflineMessage(this);
-                    String msg = "You are offline."; //TODO
+                    myServer.sendOfflineMessage(this);
+                    String msg = "You are offline.";
                     out.writeUTF(msg);
                     myServer.unSubscribe(this);
                     return;
 
                 }  else if (message.startsWith(PRIVATE_MSG_CMD_PREFIX)){
                     readAndSendPrivateMessage(message);
- //               }  else if (message.startsWith(ONLINE_CLIENT_CMD_PREFIX)){
- //                   myServer.sendNewClientMessageForAllButOne(this, message);
-//
                 } else {
                     myServer.broadcastMessage(message, this);
                     out.writeUTF("Me: " + message);
@@ -155,7 +161,11 @@ public class ClientHandler {
         out.writeUTF(String.format("%s %s", SERVER_MSG_CMD_PREFIX, message));
     }
 
-    public void sendNewClientOnline(String message) throws IOException {
-        out.writeUTF(String.format("%s %s", ONLINE_CLIENT_CMD_PREFIX, message));
+    public void sendClientsList(List<ClientHandler> clientsOnline) throws IOException {
+        String msg = String.format("%s %s", ONLINE_CLIENT_CMD_PREFIX, clientsOnline.toString());
+        out.writeUTF(msg);
+        System.out.println(msg);
     }
+    @Override
+    public String toString(){return  username;}
 }

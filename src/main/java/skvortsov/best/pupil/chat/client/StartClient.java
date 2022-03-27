@@ -91,3 +91,5 @@ public class StartClient extends Application {
         alert.show();
     }
 }
+
+// Попроюовать сделать лист в стартКлаенте и получать его здесь и грузить при открытии
