@@ -43,7 +43,7 @@ public class MyServer {
     private Socket waitingClientConnection() throws IOException {
         System.out.println("Waiting clients...");
         Socket clientSocket = serverSocket.accept();
-        System.out.println("Client is online!");
+        System.out.println("Client connected!");
         return clientSocket;
     }
 

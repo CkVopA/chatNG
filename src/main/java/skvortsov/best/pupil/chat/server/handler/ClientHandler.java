@@ -41,6 +41,7 @@ public class ClientHandler {
         new Thread(() -> {
             try {
                 authentication();
+
                 readMessage();
             } catch (IOException e) {
                 e.printStackTrace();
