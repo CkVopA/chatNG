@@ -138,7 +138,7 @@ public class Network {
     }
 
     public void sendPrivateMessage(String selectedRecipient, String msg) {
-        sendMessage(String.format("             %s %s %s", PRIVATE_MSG_CMD_PREFIX, selectedRecipient, msg));
+        sendMessage(String.format("%s %s %s", PRIVATE_MSG_CMD_PREFIX, selectedRecipient, msg));
     }
 
 }

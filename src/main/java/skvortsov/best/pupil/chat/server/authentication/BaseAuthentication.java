@@ -28,6 +28,11 @@ public class BaseAuthentication implements AuthenticationService {
     }
 
     @Override
+    public void changeUsername(String login, String newNickname) {
+        //TODO
+    }
+
+    @Override
     public void endAuthentication() {
         System.out.println("End AUTH");
     }

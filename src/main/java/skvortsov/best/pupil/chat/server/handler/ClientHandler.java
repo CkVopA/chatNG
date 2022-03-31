@@ -7,6 +7,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ClientHandler {
@@ -43,7 +44,7 @@ public class ClientHandler {
                 authentication();
 
                 readMessage();
-            } catch (IOException e) {
+            } catch (IOException | SQLException e) {
                 e.printStackTrace();
                 myServer.unSubscribe(this);
                 try {
@@ -55,7 +56,7 @@ public class ClientHandler {
         }).start();
     }
 
-    private void authentication() throws IOException {
+    private void authentication() throws IOException, SQLException {
         while (true) {
             String message = inS.readUTF();
             if (message.startsWith(AUTH_CMD_PREFIX)) {
@@ -70,7 +71,7 @@ public class ClientHandler {
         }
     }
 
-    private boolean processAuthentication(String message) throws IOException {
+    private boolean processAuthentication(String message) throws IOException, SQLException {
         String[] parts = message.split("\\s+");
         if (parts.length != 3){
             out.writeUTF(AUTHERR_CMD_PREFIX + " Wrong format authentication's message!");
@@ -80,6 +81,7 @@ public class ClientHandler {
         String password = parts[2];
 
         AuthenticationService auth = myServer.getAuthenticationService();
+        auth.startAuthentication();
         username = auth.getUsernameByLoginAndPassword(login, password);
 
         if (username != null){
@@ -88,6 +90,7 @@ public class ClientHandler {
                 return false;
             }
             out.writeUTF(String.format("%s %s", AUTHOK_CMD_PREFIX, username));
+            auth.endAuthentication();
             joiningClient();
 
             return true;

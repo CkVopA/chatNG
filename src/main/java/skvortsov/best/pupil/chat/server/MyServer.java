@@ -1,7 +1,7 @@
 package skvortsov.best.pupil.chat.server;
 
 import skvortsov.best.pupil.chat.server.authentication.AuthenticationService;
-import skvortsov.best.pupil.chat.server.authentication.BaseAuthentication;
+import skvortsov.best.pupil.chat.server.authentication.DB_Authentication;
 import skvortsov.best.pupil.chat.server.handler.ClientHandler;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ public class MyServer {
 
     public MyServer(int port) throws IOException {
         serverSocket = new ServerSocket(port);
-        authenticationService = new BaseAuthentication();
+        authenticationService = new DB_Authentication();
         clients = new ArrayList<>();
     }
 
