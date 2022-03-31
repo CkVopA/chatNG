@@ -4,47 +4,57 @@ import java.sql.*;
 
 public class DB_Authentication implements AuthenticationService {
 
-    private static Connection connection;
-    private static Statement stmt;
+    private Connection connection;
+    private Statement stmt;
 
-    public static void main(String[] args) throws SQLException {
-
-        try {
-            connection();
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-
-        getAllUsers();
-
-
-        disconnect();
-    }
 
     @Override
     public void startAuthentication() {
         try {
             connection();
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void connection() throws ClassNotFoundException, SQLException {
+        System.out.println("Подключение к базе данных . . .");
+//        Class.forName("org.sqlite.JDBC");
+        connection = DriverManager.getConnection("jdbc:sqlite:" +
+                "src/main/resources/skvortsov/best/pupil/chat/server/db/AUTH");
+        stmt = connection.createStatement();
+        System.out.println("База подключена.");
+    }
+
+    @Override
+    public String getUsernameByLoginAndPassword(String login, String password) throws SQLException {
+        ResultSet rs = stmt.executeQuery(String.format(
+                "SELECT * FROM auth WHERE login = '%s'", login));
+
+            if (rs.isClosed()) return null;
+            String username = rs.getString("username");
+            String passwordDB = rs.getString("password");
+
+            return (passwordDB.equals(password) ? username : null);
+    }
+
+    @Override
+    public void changeUsername(String login, String newNickname){
+        try {
+            stmt.executeUpdate(String.format(
+                    "UPDATE auth SET username = '%s' WHERE login = '%s'", newNickname, login));
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private static void connection() throws ClassNotFoundException, SQLException {
-        Class.forName("org.sqlite.JDBC");
-        connection = DriverManager.getConnection("jdbc:sqlite:" +
-                "src/main/resources/skvortsov/best/pupil/chat/server/db/AUTH");
-        stmt = connection.createStatement();
-    }
-
-    private static void disconnect() {
+    private  void disconnect() {
         closeStatement();
         closeConnection();
     }
 
-    private static void closeStatement() {
+    private void closeStatement() {
         try {
             if (stmt != null){
                 stmt.close();
@@ -54,7 +64,7 @@ public class DB_Authentication implements AuthenticationService {
         }
     }
 
-    private static void closeConnection() {
+    private  void closeConnection() {
         try {
             if (connection != null){
                 connection.close();
@@ -65,18 +75,11 @@ public class DB_Authentication implements AuthenticationService {
     }
 
     @Override
-    public String getUsernameByLoginAndPassword(String login, String password) {
-
-
-        return null;
-    }
-
-    @Override
     public void endAuthentication() {
         disconnect();
     }
 
-    private static void getAllUsers() throws SQLException {
+    private void getAllUsers() throws SQLException {
         ResultSet rs = stmt.executeQuery("SELECT  * FROM auth;");
         while (rs.next()){
 //            System.out.printf("ID: %2s - Name: %8s%n",
