@@ -2,6 +2,7 @@ module gb {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires org.xerial.sqlitejdbc;
 
 
     opens skvortsov.best.pupil.chat.client to javafx.fxml;
