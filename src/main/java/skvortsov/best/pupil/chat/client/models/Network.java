@@ -8,7 +8,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.SimpleTimeZone;
 
 public class Network {
 
@@ -24,7 +23,7 @@ public class Network {
     private static final String OFFLINE_CLIENT_CMD_PREFIX = "/coff";  // + userName
 
     private final String DEFAULT_HOST = "localhost";
-    private final int DEFAULT_PORT = 8189;
+    private final int DEFAULT_PORT = 8888;
     private final String host;
     private final int port;
     private Socket socket;
