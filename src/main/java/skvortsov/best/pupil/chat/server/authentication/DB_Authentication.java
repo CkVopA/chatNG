@@ -19,7 +19,7 @@ public class DB_Authentication implements AuthenticationService {
 
     private void connection() throws ClassNotFoundException, SQLException {
         System.out.println("Подключение к базе данных . . .");
-//        Class.forName("org.sqlite.JDBC");
+        Class.forName("org.sqlite.JDBC");
         connection = DriverManager.getConnection("jdbc:sqlite:" +
                 "src/main/resources/skvortsov/best/pupil/chat/server/db/AUTH");
         stmt = connection.createStatement();
@@ -77,16 +77,5 @@ public class DB_Authentication implements AuthenticationService {
     @Override
     public void endAuthentication() {
         disconnect();
-    }
-
-    private void getAllUsers() throws SQLException {
-        ResultSet rs = stmt.executeQuery("SELECT  * FROM auth;");
-        while (rs.next()){
-//            System.out.printf("ID: %2s - Name: %8s%n",
-//                    rs.getInt("id"), rs.getString("name"));
-
-            System.out.printf("login: %4s - password: %8s < %9s >%n" ,
-                    rs.getString("login"), rs.getString("password"), rs.getString("username"));
-        }
     }
 }
