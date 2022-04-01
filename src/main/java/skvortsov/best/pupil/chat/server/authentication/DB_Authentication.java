@@ -39,15 +39,20 @@ public class DB_Authentication implements AuthenticationService {
     }
 
     @Override
-    public void changeUsername(String login, String newNickname){
+    public boolean changeUsername(String newNickname, String login){
         try {
             stmt.executeUpdate(String.format(
                     "UPDATE auth SET username = '%s' WHERE login = '%s'", newNickname, login));
-
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
+
+
+
+
 
     private  void disconnect() {
         closeStatement();
@@ -77,5 +82,6 @@ public class DB_Authentication implements AuthenticationService {
     @Override
     public void endAuthentication() {
         disconnect();
+        System.out.println("БД отключена.");
     }
 }

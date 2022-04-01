@@ -19,8 +19,10 @@ public class Network {
     private static final String PRIVATE_MSG_CMD_PREFIX = "/pm"; // + message
     private static final String STOP_SERVER_CMD_PREFIX = "/stop"; // stop server
     private static final String END_CLIENT_CMD_PREFIX = "/end";  // end session, close connection
-    private static final String ONLINE_CLIENT_CMD_PREFIX = "/con";  // + userName
+    private static final String REFRESH_CLIENTS_LIST_CMD_PREFIX = "/rcl";  // + userName
     private static final String OFFLINE_CLIENT_CMD_PREFIX = "/coff";  // + userName
+    private static final String RENAME_USER_CMD_PREFIX = "/rnm";  // + new username
+
 
     private final String DEFAULT_HOST = "localhost";
     private final int DEFAULT_PORT = 8888;
@@ -95,7 +97,7 @@ public class Network {
                         Platform.runLater(()-> {
                             chatController.appendServerMessage(serverMessage);
                         });
-                    } else if (msg.startsWith(ONLINE_CLIENT_CMD_PREFIX)){
+                    } else if (msg.startsWith(REFRESH_CLIENTS_LIST_CMD_PREFIX)){
                         msg = msg.substring(msg.indexOf('[') + 1, msg.indexOf(']'));
                         String[] users = msg.split(", ");
 

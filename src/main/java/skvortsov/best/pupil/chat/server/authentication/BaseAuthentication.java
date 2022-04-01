@@ -28,8 +28,9 @@ public class BaseAuthentication implements AuthenticationService {
     }
 
     @Override
-    public void changeUsername(String login, String newNickname) {
+    public boolean changeUsername(String newNickname, String login) {
         //TODO
+        return false;
     }
 
     @Override

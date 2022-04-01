@@ -127,4 +127,11 @@ public class MyServer {
         }
         System.out.println(msg);
     }
+
+    public synchronized void refreshContactsList() throws IOException {
+        System.out.println("Обновление списка пользователей в сети.");
+        for (ClientHandler client : clients) {
+            client.sendClientsList(clients);
+        }
+    }
 }
