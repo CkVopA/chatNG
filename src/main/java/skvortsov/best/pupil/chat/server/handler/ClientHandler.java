@@ -29,6 +29,7 @@ public class ClientHandler {
     private static final String REFRESH_CLIENTS_LIST_CMD_PREFIX = "/rcl";  // + userlist
     private static final String OFFLINE_CLIENT_CMD_PREFIX = "/coff";  // + userName
     private static final String RENAME_USER_CMD_PREFIX = "/rnm";  // + new username
+    private static final String CHANGING_USERNAME_CMD_PREFIX = "/chgusn";  // + oldUsername + newUsername
     private String username;
     private String login;
 
@@ -152,6 +153,7 @@ public class ClientHandler {
                         this.username = newUsername;
                         myServer.refreshContactsList();
                         auth.endAuthentication();
+                        myServer.sendNewUsername(oldUsername, newUsername);
                     }
 
                 } else {
@@ -189,4 +191,9 @@ public class ClientHandler {
     }
     @Override
     public String toString(){return  username;}
+
+    public void sendChangingUsernameMessage(String oldUsername, String newUsername) throws IOException {
+        String msg = String.format("%s %s %s", CHANGING_USERNAME_CMD_PREFIX, oldUsername, newUsername);
+        out.writeUTF(msg);
+    }
 }
