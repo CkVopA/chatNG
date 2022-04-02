@@ -9,12 +9,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import skvortsov.best.pupil.chat.client.controllers.AuthController;
 import skvortsov.best.pupil.chat.client.controllers.ChatController;
+import skvortsov.best.pupil.chat.client.controllers.RenameController;
 import skvortsov.best.pupil.chat.client.models.Network;
 
 import java.io.IOException;
 
 public class StartClient extends Application {
 
+    private static Stage renameStage;
     private Network network;
     private Stage primaryStage;
     private Stage authStage;
@@ -64,12 +66,27 @@ public class StartClient extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(StartClient.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
+
     public static void windowAbout(Stage stageAbout) throws IOException {
         Scene sceneAbout = new Scene(loadFXML("aboutWindow"));
         stageAbout.setScene(sceneAbout);
         stageAbout.setTitle("About APP");
         stageAbout.centerOnScreen();
         stageAbout.show();
+    }
+    public static void openRename(Network network) throws IOException {
+        renameStage = new Stage();
+        Scene sceneRename = new Scene(loadFXML("rename-view"));
+        renameStage.setScene(sceneRename);
+        renameStage.setTitle("Изменение никнейма");
+        renameStage.show();
+
+        RenameController controller = new RenameController();
+        controller.getNetwork(network);
+
+    }
+    public void closeRename(){
+        renameStage.close();
     }
 
     public static void main(String[] args) {

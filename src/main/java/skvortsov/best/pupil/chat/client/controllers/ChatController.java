@@ -1,6 +1,5 @@
 package skvortsov.best.pupil.chat.client.controllers;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,7 +13,10 @@ import skvortsov.best.pupil.chat.client.models.Network;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.ResourceBundle;
 
 public class ChatController implements Initializable {
 
@@ -132,6 +134,10 @@ public class ChatController implements Initializable {
         }
         contactsList.getItems().clear();
         Collections.addAll(contactsList.getItems(), users);
+    }
 
+    @FXML
+    public void changeUsername() throws IOException {
+        StartClient.openRename(network);
     }
 }
