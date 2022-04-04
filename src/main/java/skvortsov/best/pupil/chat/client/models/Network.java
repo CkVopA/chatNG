@@ -19,8 +19,12 @@ public class Network {
     private static final String PRIVATE_MSG_CMD_PREFIX = "/pm"; // + message
     private static final String STOP_SERVER_CMD_PREFIX = "/stop"; // stop server
     private static final String END_CLIENT_CMD_PREFIX = "/end";  // end session, close connection
-    private static final String ONLINE_CLIENT_CMD_PREFIX = "/con";  // + userName
+    private static final String REFRESH_CLIENTS_LIST_CMD_PREFIX = "/rcl";  // + userName
     private static final String OFFLINE_CLIENT_CMD_PREFIX = "/coff";  // + userName
+    private static final String RENAME_USER_CMD_PREFIX = "/rnm";  // + new username
+    private static final String CHANGING_USERNAME_CMD_PREFIX = "/chgusn";  // + oldUsername + newUsername
+
+
 
     private final String DEFAULT_HOST = "localhost";
     private final int DEFAULT_PORT = 8888;
@@ -95,11 +99,22 @@ public class Network {
                         Platform.runLater(()-> {
                             chatController.appendServerMessage(serverMessage);
                         });
-                    } else if (msg.startsWith(ONLINE_CLIENT_CMD_PREFIX)){
+                    } else if (msg.startsWith(REFRESH_CLIENTS_LIST_CMD_PREFIX)){
                         msg = msg.substring(msg.indexOf('[') + 1, msg.indexOf(']'));
                         String[] users = msg.split(", ");
 
                         Platform.runLater(()-> chatController.updateContactsList(users));
+
+                    } else if (msg.startsWith(CHANGING_USERNAME_CMD_PREFIX)){
+
+                        String[] users = msg.split("\\s+");
+                        String oldUsername = users[1];
+                        String newUsername = users[2];
+                        if (changeUsername(oldUsername, newUsername)){
+                            Platform.runLater(()-> {
+                                chatController.setUsernameLabel(newUsername);
+                            });
+                        }
                     }
                     else {
                         String finalMsg = msg;
@@ -115,6 +130,18 @@ public class Network {
         });
         t.setDaemon(true);
         t.start();
+    }
+
+    private boolean changeUsername(String oldUsername, String newUsername) {
+        if (this.username.equals(oldUsername)){
+            this.username = newUsername;
+            return true;
+        }
+        else {
+            System.out.println("Ошибка изменения имени!");
+            return false;
+        }
+
     }
 
     public String sendAuthMessage(String login, String password) {

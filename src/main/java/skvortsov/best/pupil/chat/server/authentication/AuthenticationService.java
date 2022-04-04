@@ -7,7 +7,7 @@ public interface AuthenticationService {
         String getUsernameByLoginAndPassword(String login, String password) throws SQLException;
         void startAuthentication();
 
-        void changeUsername(String login, String newNickname);
+        boolean changeUsername(String newNickname, String login);
 
         void endAuthentication();
 }

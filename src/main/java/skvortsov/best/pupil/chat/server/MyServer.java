@@ -41,10 +41,12 @@ public class MyServer {
     }
 
     private Socket waitingClientConnection() throws IOException {
-        System.out.println("Waiting clients...");
-        Socket clientSocket = serverSocket.accept();
-        System.out.println("Client connected!");
-        return clientSocket;
+        while (true) {
+            System.out.println("Waiting clients...");
+            Socket clientSocket = serverSocket.accept();
+            System.out.println("Client connected!");
+            return clientSocket;
+        }
     }
 
     private void processClientConnection(Socket clientSocket) throws IOException {
@@ -126,5 +128,20 @@ public class MyServer {
             client.sendServerMessage(msg);
         }
         System.out.println(msg);
+    }
+
+    public synchronized void refreshContactsList() throws IOException {
+        System.out.println("Обновление списка пользователей в сети.");
+        for (ClientHandler client : clients) {
+            client.sendClientsList(clients);
+        }
+    }
+
+    public synchronized void sendNewUsername(String oldUsername, String newUsername) throws IOException {
+        for (ClientHandler client : clients) {
+            if (client.getUsername().equals(newUsername)) {
+                client.sendChangingUsernameMessage(oldUsername, newUsername);
+            }
+        }
     }
 }

@@ -79,7 +79,7 @@ public class StartClient extends Application {
     public void openChatDialog() {
         authStage.close();
         primaryStage.show();
-        primaryStage.setTitle("Chat NextGEN! - " + network.getUsername());
+        primaryStage.setTitle("Chat NextGEN!");
         network.waitMessage(chatController);
         chatController.setUsernameLabel(network.getUsername());
     }
@@ -91,5 +91,3 @@ public class StartClient extends Application {
         alert.show();
     }
 }
-
-// Попроюовать сделать лист в стартКлаенте и получать его здесь и грузить при открытии

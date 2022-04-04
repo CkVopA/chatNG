@@ -2,6 +2,7 @@ package skvortsov.best.pupil.chat.server.handler;
 
 import skvortsov.best.pupil.chat.server.MyServer;
 import skvortsov.best.pupil.chat.server.authentication.AuthenticationService;
+import skvortsov.best.pupil.chat.server.authentication.DB_Authentication;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -25,12 +26,14 @@ public class ClientHandler {
     private static final String PRIVATE_MSG_CMD_PREFIX = "/pm"; // + message
     private static final String STOP_SERVER_CMD_PREFIX = "/stop"; // stop server
     private static final String END_CLIENT_CMD_PREFIX = "/end";  // end session, close connection
-    private static final String ONLINE_CLIENT_CMD_PREFIX = "/con";  // + userName
+    private static final String REFRESH_CLIENTS_LIST_CMD_PREFIX = "/rcl";  // + userlist
     private static final String OFFLINE_CLIENT_CMD_PREFIX = "/coff";  // + userName
+    private static final String RENAME_USER_CMD_PREFIX = "/rnm";  // + new username
+    private static final String CHANGING_USERNAME_CMD_PREFIX = "/chgusn";  // + oldUsername + newUsername
     private String username;
+    private String login;
 
     public ClientHandler(MyServer myServer, Socket socket) {
-
         this.myServer = myServer;
         this.clientSocket = socket;
     }
@@ -42,7 +45,6 @@ public class ClientHandler {
         new Thread(() -> {
             try {
                 authentication();
-
                 readMessage();
             } catch (IOException | SQLException e) {
                 e.printStackTrace();
@@ -77,7 +79,7 @@ public class ClientHandler {
             out.writeUTF(AUTHERR_CMD_PREFIX + " Wrong format authentication's message!");
             return false;
         }
-        String login = parts[1];
+        login = parts[1];
         String password = parts[2];
 
         AuthenticationService auth = myServer.getAuthenticationService();
@@ -90,6 +92,7 @@ public class ClientHandler {
                 return false;
             }
             out.writeUTF(String.format("%s %s", AUTHOK_CMD_PREFIX, username));
+
             auth.endAuthentication();
             joiningClient();
 
@@ -137,6 +140,22 @@ public class ClientHandler {
 
                 }  else if (message.startsWith(PRIVATE_MSG_CMD_PREFIX)){
                     readAndSendPrivateMessage(message);
+                } else if (message.startsWith(RENAME_USER_CMD_PREFIX)){
+                    String[] parts = message.split("\\s+",2);
+                    String newUsername = parts[1];
+                    String oldUsername = this.getUsername();
+
+                    AuthenticationService auth = new DB_Authentication();
+                    auth.startAuthentication();
+                    if (auth.changeUsername(newUsername, login)) {
+                        myServer.sendServerMessageForAllButOne(this,
+                                String.format("Пользователь [ %s ] сменил никнейм на [ %s ]", oldUsername, newUsername));
+                        this.username = newUsername;
+                        myServer.refreshContactsList();
+                        auth.endAuthentication();
+                        myServer.sendNewUsername(oldUsername, newUsername);
+                    }
+
                 } else {
                     myServer.broadcastMessage(message, this);
                     out.writeUTF("Me: " + message);
@@ -152,7 +171,7 @@ public class ClientHandler {
         String[] partsPrivateMessage = message.split("\\s+",3);
         String recipient = partsPrivateMessage[1];
         String privateMessage = partsPrivateMessage[2];
-        System.out.println("Received privat msg for ["+ recipient+"]");
+        System.out.println("Received private msg for ["+ recipient+"]");
         out.writeUTF("Me for ["+ recipient+"]: { "+ privateMessage +" }");
         myServer.privateMessage(this, recipient, privateMessage);
     }
@@ -166,10 +185,15 @@ public class ClientHandler {
     }
 
     public void sendClientsList(List<ClientHandler> clientsOnline) throws IOException {
-        String msg = String.format("%s %s", ONLINE_CLIENT_CMD_PREFIX, clientsOnline.toString());
+        String msg = String.format("%s %s", REFRESH_CLIENTS_LIST_CMD_PREFIX, clientsOnline.toString());
         out.writeUTF(msg);
         System.out.println(msg);
     }
     @Override
     public String toString(){return  username;}
+
+    public void sendChangingUsernameMessage(String oldUsername, String newUsername) throws IOException {
+        String msg = String.format("%s %s %s", CHANGING_USERNAME_CMD_PREFIX, oldUsername, newUsername);
+        out.writeUTF(msg);
+    }
 }
