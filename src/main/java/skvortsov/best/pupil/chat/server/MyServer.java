@@ -4,7 +4,7 @@ import skvortsov.best.pupil.chat.server.authentication.AuthenticationService;
 import skvortsov.best.pupil.chat.server.authentication.DB_Authentication;
 import skvortsov.best.pupil.chat.server.handler.ClientHandler;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -15,6 +15,8 @@ public class MyServer {
     private final ServerSocket serverSocket;
     private final AuthenticationService authenticationService;
     private final List<ClientHandler> clients;
+    private String filePath = "src/main/resources/skvortsov/best/pupil/chat/server/historyMessages/historyChat.txt";
+    private File fileHistoryChat = new File(filePath);
 
     public MyServer(int port) throws IOException {
         serverSocket = new ServerSocket(port);
@@ -49,13 +51,13 @@ public class MyServer {
         }
     }
 
+    public AuthenticationService getAuthenticationService() {
+        return authenticationService;
+    }
+
     private void processClientConnection(Socket clientSocket) throws IOException {
         ClientHandler handler = new ClientHandler(this, clientSocket);
         handler.handle();
-    }
-
-    public AuthenticationService getAuthenticationService() {
-        return authenticationService;
     }
 
     public synchronized boolean isUsernameBusy(String username) {
@@ -70,6 +72,7 @@ public class MyServer {
     public synchronized void subscribe(ClientHandler clientHandler) throws IOException {
         clients.add(clientHandler);
         System.out.println(clients);
+        sendOnlineMessage(clientHandler);
     }
 
     public synchronized void unSubscribe(ClientHandler clientHandler) {
@@ -89,7 +92,7 @@ public class MyServer {
     public synchronized void privateMessage(ClientHandler sender, String recipient, String msg) throws IOException {
         for (ClientHandler client : clients) {
             if (client.getUsername().equals(recipient)) {
-                client.sendMessagePrivate(sender.getUsername(), msg);
+                client.sendPrivateMessage(sender.getUsername(), msg);
             }
         }
     }
@@ -141,6 +144,21 @@ public class MyServer {
         for (ClientHandler client : clients) {
             if (client.getUsername().equals(newUsername)) {
                 client.sendChangingUsernameMessage(oldUsername, newUsername);
+            }
+        }
+    }
+
+    public void saveMessageInHistory(String msg) throws IOException {
+        if (!fileHistoryChat.exists() ){
+            fileHistoryChat.createNewFile();
+        } else {
+            try (FileOutputStream fos = new FileOutputStream(filePath)){
+                byte[] buffer = msg.getBytes();
+                fos.write(buffer, 0, buffer.length);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

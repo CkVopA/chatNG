@@ -1,6 +1,5 @@
 package skvortsov.best.pupil.chat.client.controllers;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,10 +10,13 @@ import javafx.stage.Stage;
 import skvortsov.best.pupil.chat.client.StartClient;
 import skvortsov.best.pupil.chat.client.models.Network;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.text.DateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.ResourceBundle;
 
 public class ChatController implements Initializable {
 
@@ -133,5 +135,20 @@ public class ChatController implements Initializable {
         contactsList.getItems().clear();
         Collections.addAll(contactsList.getItems(), users);
 
+    }
+
+    @FXML
+    public void getHistory(File fileHistory){
+        System.out.println("Дошло до сюда?");
+        String filepath = fileHistory.getPath();
+        try (FileInputStream fis = new FileInputStream(filepath)){
+            int length = (int) new File(filepath).length();
+            byte[] buffer = new byte[length];
+            fis.read(buffer, 0, length);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

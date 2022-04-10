@@ -82,6 +82,7 @@ public class StartClient extends Application {
         primaryStage.setTitle("Chat NextGEN!");
         network.waitMessage(chatController);
         chatController.setUsernameLabel(network.getUsername());
+
     }
 
     public void showErrorAlert(String title, String errorMessage){
