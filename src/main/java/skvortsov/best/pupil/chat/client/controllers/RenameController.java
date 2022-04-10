@@ -5,21 +5,25 @@ import javafx.scene.control.TextField;
 import skvortsov.best.pupil.chat.client.StartClient;
 import skvortsov.best.pupil.chat.client.models.Network;
 
+import java.io.IOException;
+
 public class RenameController {
 
     @FXML
     private TextField nameField;
+
     private Network network;
-    @FXML
-    public void changeUsername(){
-        String newUsername = nameField.getText();
-        network = new Network();
-        network.sendMessage("/rnm "+ newUsername);
-        StartClient startClient = new StartClient();
-        startClient.closeRename();
+
+    public void setNetwork(Network network) {
+        this.network = network;
     }
 
-    public void getNetwork(Network network) {
-        this.network = network;
+    @FXML
+    public String changeUsername() throws IOException {
+
+        String newUsername = nameField.getText().trim();
+        StartClient startClient = new StartClient();
+        startClient.closeRename();
+            return newUsername;
     }
 }

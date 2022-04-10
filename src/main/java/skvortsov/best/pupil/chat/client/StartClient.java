@@ -67,13 +67,6 @@ public class StartClient extends Application {
         return fxmlLoader.load();
     }
 
-    public static void windowAbout(Stage stageAbout) throws IOException {
-        Scene sceneAbout = new Scene(loadFXML("aboutWindow"));
-        stageAbout.setScene(sceneAbout);
-        stageAbout.setTitle("About APP");
-        stageAbout.centerOnScreen();
-        stageAbout.show();
-    }
     public static void openRename(Network network) throws IOException {
         renameStage = new Stage();
         Scene sceneRename = new Scene(loadFXML("rename-view"));
@@ -82,11 +75,20 @@ public class StartClient extends Application {
         renameStage.show();
 
         RenameController controller = new RenameController();
-        controller.getNetwork(network);
+        controller.setNetwork(network);
+        network.waitNewUsername(controller);
 
     }
     public void closeRename(){
         renameStage.close();
+    }
+
+    public static void windowAbout(Stage stageAbout) throws IOException {
+        Scene sceneAbout = new Scene(loadFXML("aboutWindow"));
+        stageAbout.setScene(sceneAbout);
+        stageAbout.setTitle("About APP");
+        stageAbout.centerOnScreen();
+        stageAbout.show();
     }
 
     public static void main(String[] args) {

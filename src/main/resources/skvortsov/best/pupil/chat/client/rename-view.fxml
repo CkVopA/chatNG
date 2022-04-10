@@ -9,7 +9,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="122.0" prefWidth="387.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
                fx:controller="skvortsov.best.pupil.chat.client.controllers.RenameController">
    <children>
-      <TextField fx:id="nameField" layoutX="68.0" layoutY="29.0" prefHeight="32.0" prefWidth="252.0" onAction="#changeUsername" promptText="Введите новый никнейм . . ." />
+      <TextField fx:id="nameField" layoutX="68.0" layoutY="29.0" prefHeight="32.0" prefWidth="252.0"  promptText="Введите новый никнейм . . ." />
       <Button layoutX="144.0" layoutY="76.0" mnemonicParsing="false" prefHeight="32.0" onAction="#changeUsername" prefWidth="99.0" text="Изменить">
          <font>
             <Font size="14.0" />

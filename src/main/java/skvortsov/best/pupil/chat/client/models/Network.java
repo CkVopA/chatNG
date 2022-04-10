@@ -3,6 +3,7 @@ package skvortsov.best.pupil.chat.client.models;
 import javafx.application.Platform;
 import skvortsov.best.pupil.chat.client.StartClient;
 import skvortsov.best.pupil.chat.client.controllers.ChatController;
+import skvortsov.best.pupil.chat.client.controllers.RenameController;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -168,4 +169,15 @@ public class Network {
         sendMessage(String.format("%s %s %s", PRIVATE_MSG_CMD_PREFIX, selectedRecipient, msg));
     }
 
+    public void sendNewUsername(String newUsername) throws IOException {
+           out.writeUTF(RENAME_USER_CMD_PREFIX + " " + newUsername);
+    }
+
+    public void waitNewUsername(RenameController controller) throws IOException {
+        String name = null;
+        while (name==null){
+            name = controller.changeUsername();
+        }
+        out.writeUTF(RENAME_USER_CMD_PREFIX + " " + name);
+    }
 }

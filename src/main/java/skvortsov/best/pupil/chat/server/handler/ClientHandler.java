@@ -141,6 +141,7 @@ public class ClientHandler {
                 }  else if (message.startsWith(PRIVATE_MSG_CMD_PREFIX)){
                     readAndSendPrivateMessage(message);
                 } else if (message.startsWith(RENAME_USER_CMD_PREFIX)){
+                    System.out.println("Пришла переименовка!");
                     String[] parts = message.split("\\s+",2);
                     String newUsername = parts[1];
                     String oldUsername = this.getUsername();
