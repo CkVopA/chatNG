@@ -1,1 +1,1 @@
-[Director]: dsfsdvsd 
+[Director]: dsfsdvsd [Junior]: aloha [Director]: hello [Junior]: Yo!Me for [>]: { Junior < asdsd }

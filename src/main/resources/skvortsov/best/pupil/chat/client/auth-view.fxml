@@ -7,7 +7,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="214.0" prefWidth="407.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="skvortsov.best.pupil.chat.client.controllers.AuthController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="214.0" prefWidth="407.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="skvortsov.best.pupil.chat.client.controllers.AuthController">
    <children>
       <Label focusTraversable="false" layoutX="83.0" layoutY="14.0" prefHeight="47.0" prefWidth="240.0" text="Для входа в чат, введите логин и пароль, чтобы авторизироваться" textAlignment="CENTER" wrapText="true">
          <font>

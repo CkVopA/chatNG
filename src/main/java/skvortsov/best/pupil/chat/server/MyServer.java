@@ -152,7 +152,7 @@ public class MyServer {
         if (!fileHistoryChat.exists() ){
             fileHistoryChat.createNewFile();
         } else {
-            try (FileOutputStream fos = new FileOutputStream(filePath)){
+            try (FileOutputStream fos = new FileOutputStream(filePath, true)){
                 byte[] buffer = msg.getBytes();
                 fos.write(buffer, 0, buffer.length);
             } catch (FileNotFoundException e) {
