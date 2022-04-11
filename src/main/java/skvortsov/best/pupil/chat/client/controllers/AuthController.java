@@ -41,7 +41,8 @@ public class AuthController {
         String authErrorMessage = network.sendAuthMessage(login, password);
 
         if (authErrorMessage == null){
-            startClient.openChatDialog();
+            startClient.openChatDialog(login);
+
         } else {
             startClient.showErrorAlert("Ошибка аутентификации!", authErrorMessage);
         }

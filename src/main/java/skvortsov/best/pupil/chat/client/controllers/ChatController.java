@@ -39,7 +39,11 @@ public class ChatController implements Initializable {
 
     );
 
+    private final File libDir = new File("src/main/resources/skvortsov/best/pupil/chat/client/chat_history");;
+
     private String selectedRecipient;
+    private File fileHistory;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         sendButton.setOnAction(actionEvent -> sendMessage());
@@ -48,6 +52,26 @@ public class ChatController implements Initializable {
 
         chooseContactsListForPrivateMessage();
     }
+
+
+
+
+
+
+    public void checkFileHistory(String login) {
+        fileHistory = new File(libDir, "history_[" + login + "].txt");
+        if (!fileHistory.exists()){
+            try {
+                fileHistory.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+
 
     private void chooseContactsListForPrivateMessage() {
         contactsList.setCellFactory(lv -> {
@@ -91,19 +115,37 @@ public class ChatController implements Initializable {
         chatList.appendText(System.lineSeparator());
         chatList.appendText(msg);
         chatList.appendText(System.lineSeparator());
+        chatList.appendText(System.lineSeparator());
+
+        String msgForHistory = timeStamp + "\n"+ msg;
+        writeMessageInHistory(msgForHistory, fileHistory);
     }
 
     public void appendServerMessage(String serverMessage) {
+        chatList.appendText(System.lineSeparator());
         chatList.appendText(System.lineSeparator());
         chatList.appendText(">>> "+ serverMessage + " <<<");
         chatList.appendText(System.lineSeparator());
         chatList.appendText(System.lineSeparator());
     }
 
+
+
+    private void writeMessageInHistory(String msgForHistory, File fileHistory) {
+        try (FileWriter writer = new FileWriter(fileHistory, true)){
+            writer.write(msgForHistory);
+            writer.append('\n');
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
-    public void clearChatList(){
+    public void clearChatList(){  // придётся переименовать - очистить поле чата
         chatList.clear();
     }
+                // и создать ещё один метод по очистке файла истории
 
     @FXML
     public void exitApp(){
@@ -151,4 +193,6 @@ public class ChatController implements Initializable {
             e.printStackTrace();
         }
     }
+
+
 }
