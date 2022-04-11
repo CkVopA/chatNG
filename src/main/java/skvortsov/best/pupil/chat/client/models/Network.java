@@ -36,6 +36,7 @@ public class Network {
     private DataOutputStream out;
     private String username;
     private StartClient startClient;
+    private String login;
 
 
     public Network() {
@@ -164,8 +165,16 @@ public class Network {
         return username;
     }
 
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+
     public void sendPrivateMessage(String selectedRecipient, String msg) {
         sendMessage(String.format("%s %s %s", PRIVATE_MSG_CMD_PREFIX, selectedRecipient, msg));
     }
 
+    public String getLogin() {
+        return login;
+    }
 }

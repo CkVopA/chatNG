@@ -51,6 +51,7 @@ public class ChatController implements Initializable {
         contactsList.setItems(contacts);
 
         chooseContactsListForPrivateMessage();
+        checkFileHistory(network.getLogin());
     }
 
 
@@ -135,7 +136,26 @@ public class ChatController implements Initializable {
         try (FileWriter writer = new FileWriter(fileHistory, true)){
             writer.write(msgForHistory);
             writer.append('\n');
-            writer.flush();
+           // writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void readAllHistory(){
+        try (FileReader reader = new FileReader(fileHistory)){
+            char[] buf = new char[256];
+            int c;
+            while((c = reader.read(buf))>0){
+
+                if(c < 256){
+                    buf = Arrays.copyOf(buf, c);
+                }
+                System.out.print(buf);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -145,7 +165,11 @@ public class ChatController implements Initializable {
     public void clearChatList(){  // придётся переименовать - очистить поле чата
         chatList.clear();
     }
-                // и создать ещё один метод по очистке файла истории
+    @FXML
+    public void clearHistory(){  // и создать ещё один метод по очистке файла истории
+        fileHistory.delete();
+        checkFileHistory(network.getLogin());
+    }
 
     @FXML
     public void exitApp(){
@@ -179,7 +203,10 @@ public class ChatController implements Initializable {
 
     }
 
-    @FXML
+
+
+
+    /*@FXML
     public void getHistory(File fileHistory){
         System.out.println("Дошло до сюда?");
         String filepath = fileHistory.getPath();
@@ -192,7 +219,8 @@ public class ChatController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
+
 
 
 }

@@ -76,15 +76,13 @@ public class StartClient extends Application {
         launch();
     }
 
-    public void openChatDialog(String login) {
+    public void openChatDialog() {
         authStage.close();
         primaryStage.show();
         primaryStage.setTitle("Chat NextGEN!");
         network.waitMessage(chatController);
 
         chatController.setUsernameLabel(network.getUsername()); // Зачем вызывать здесь когда можно просто из конртоллера...
-
-        chatController.checkFileHistory(login);
 
     }
 
