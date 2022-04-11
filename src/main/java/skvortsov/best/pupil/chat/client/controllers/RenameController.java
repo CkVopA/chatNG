@@ -13,17 +13,28 @@ public class RenameController {
     private TextField nameField;
 
     private Network network;
+    private String newUsername;
 
     public void setNetwork(Network network) {
         this.network = network;
     }
 
     @FXML
-    public String changeUsername() throws IOException {
+    public void changeUsername() throws IOException {
 
-        String newUsername = nameField.getText().trim();
+        // или isEmpty как-нибудь
+        while (nameField.getText().trim() == null){
+            newUsername = nameField.getText().trim();
+        }
+
+        network.sendNewUsername(newUsername);
+
+        closeRenameWindow();
+
+    }
+
+    public void closeRenameWindow() {
         StartClient startClient = new StartClient();
         startClient.closeRename();
-            return newUsername;
     }
 }

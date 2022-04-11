@@ -16,11 +16,11 @@ import java.io.IOException;
 
 public class StartClient extends Application {
 
-    private static Stage renameStage;
     private Network network;
     private Stage primaryStage;
     private Stage authStage;
     private ChatController chatController;
+    private RenameController controller;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -67,16 +67,18 @@ public class StartClient extends Application {
         return fxmlLoader.load();
     }
 
-    public static void openRename(Network network) throws IOException {
+    // static или нет????
+    public void openRename(Network network) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(StartClient.class.getResource("rename-view.fxml"));
+        Scene sceneRename = new Scene(fxmlLoader.load());
+        Stage renameStage = new Stage();
         renameStage = new Stage();
-        Scene sceneRename = new Scene(loadFXML("rename-view"));
         renameStage.setScene(sceneRename);
         renameStage.setTitle("Изменение никнейма");
         renameStage.show();
 
-        RenameController controller = new RenameController();
+        controller = fxmlLoader.getController();
         controller.setNetwork(network);
-        network.waitNewUsername(controller);
 
     }
     public void closeRename(){

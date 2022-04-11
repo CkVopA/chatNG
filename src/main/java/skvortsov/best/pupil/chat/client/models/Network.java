@@ -172,12 +172,4 @@ public class Network {
     public void sendNewUsername(String newUsername) throws IOException {
            out.writeUTF(RENAME_USER_CMD_PREFIX + " " + newUsername);
     }
-
-    public void waitNewUsername(RenameController controller) throws IOException {
-        String name = null;
-        while (name==null){
-            name = controller.changeUsername();
-        }
-        out.writeUTF(RENAME_USER_CMD_PREFIX + " " + name);
-    }
 }
