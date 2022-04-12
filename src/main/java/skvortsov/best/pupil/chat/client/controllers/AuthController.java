@@ -7,6 +7,8 @@ import javafx.scene.control.TextField;
 import skvortsov.best.pupil.chat.client.StartClient;
 import skvortsov.best.pupil.chat.client.models.Network;
 
+import java.io.IOException;
+
 public class AuthController {
 
     @FXML
@@ -29,7 +31,7 @@ public class AuthController {
     }
 
     @FXML
-    public void checkAuth(){
+    public void checkAuth() throws IOException {
         String login = loginField.getText().trim();
         String password = passwordField.getText().trim();
 
@@ -41,6 +43,7 @@ public class AuthController {
         String authErrorMessage = network.sendAuthMessage(login, password);
 
         if (authErrorMessage == null){
+            startClient.createChatDialog();
             startClient.openChatDialog();
             network.setLogin(login);
 

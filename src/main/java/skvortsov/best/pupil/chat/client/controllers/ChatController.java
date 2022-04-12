@@ -39,7 +39,7 @@ public class ChatController implements Initializable {
 
     );
 
-    private final File libDir = new File("src/main/resources/skvortsov/best/pupil/chat/client/chat_history");;
+    private final File libDir = new File("src/main/resources/skvortsov/best/pupil/chat/client/chat_history");
 
     private String selectedRecipient;
     private File fileHistory;
@@ -51,13 +51,8 @@ public class ChatController implements Initializable {
         contactsList.setItems(contacts);
 
         chooseContactsListForPrivateMessage();
-        checkFileHistory(network.getLogin());
+
     }
-
-
-
-
-
 
     public void checkFileHistory(String login) {
         fileHistory = new File(libDir, "history_[" + login + "].txt");
@@ -69,10 +64,6 @@ public class ChatController implements Initializable {
             }
         }
     }
-
-
-
-
 
     private void chooseContactsListForPrivateMessage() {
         contactsList.setCellFactory(lv -> {
@@ -130,9 +121,8 @@ public class ChatController implements Initializable {
         chatList.appendText(System.lineSeparator());
     }
 
-
-
     private void writeMessageInHistory(String msgForHistory, File fileHistory) {
+        checkFileHistory(network.getLogin());
         try (FileWriter writer = new FileWriter(fileHistory, true)){
             writer.write(msgForHistory);
             writer.append('\n');
@@ -152,7 +142,7 @@ public class ChatController implements Initializable {
                 if(c < 256){
                     buf = Arrays.copyOf(buf, c);
                 }
-                System.out.print(buf);
+                chatList.appendText(String.valueOf(buf));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
