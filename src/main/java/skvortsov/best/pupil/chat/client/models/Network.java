@@ -167,6 +167,7 @@ public class Network {
 
     public void setLogin(String login) {
         this.login = login;
+        System.out.println(login);
     }
 
 
@@ -175,6 +176,7 @@ public class Network {
     }
 
     public String getLogin() {
+        System.out.println(this.login);
         return login;
     }
 }

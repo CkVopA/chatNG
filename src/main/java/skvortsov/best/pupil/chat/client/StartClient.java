@@ -29,7 +29,7 @@ public class StartClient extends Application {
         network.connect();
 
         openAuthDialog();
-        createChatDialog();
+      //  createChatDialog();
     }
 
     private void openRegOrAuthDialog() {
@@ -51,7 +51,7 @@ public class StartClient extends Application {
         authController.setStartClient(this);
     }
 
-    private void createChatDialog() throws IOException {
+    public void createChatDialog() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(StartClient.class.getResource("chat-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         primaryStage.setScene(scene);
