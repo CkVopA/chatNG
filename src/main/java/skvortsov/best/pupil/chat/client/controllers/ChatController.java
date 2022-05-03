@@ -137,7 +137,7 @@ public class ChatController implements Initializable {
     }
 
     @FXML
-    public void changeUsername() {
+    public void changeUsername() throws IOException {
         StartClient startClient = new StartClient();
         startClient.openRename(network);
     }

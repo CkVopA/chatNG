@@ -2,7 +2,6 @@ package skvortsov.best.pupil.chat.client.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import skvortsov.best.pupil.chat.client.StartClient;
 import skvortsov.best.pupil.chat.client.models.Network;
 
 import java.io.IOException;
@@ -20,21 +19,13 @@ public class RenameController {
     }
 
     @FXML
-    public void changeUsername() throws IOException {
+    public boolean changeUsername() throws IOException {
 
-        // или isEmpty как-нибудь
-        while (nameField.getText().trim() == null){
-            newUsername = nameField.getText().trim();
-        }
-
-        network.sendNewUsername(newUsername);
-
-        closeRenameWindow();
-
+        newUsername = nameField.getText().trim();
+        if (!newUsername.isBlank()) {
+            network.sendNewUsername(newUsername);
+            return true;
+        } else return false;
     }
 
-    public void closeRenameWindow() {
-        StartClient startClient = new StartClient();
-        startClient.closeRename();
-    }
 }

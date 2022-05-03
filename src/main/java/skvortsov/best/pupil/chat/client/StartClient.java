@@ -21,6 +21,7 @@ public class StartClient extends Application {
     private Stage authStage;
     private ChatController chatController;
     private RenameController controller;
+    private Stage renameStage;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -71,7 +72,6 @@ public class StartClient extends Application {
     public void openRename(Network network) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(StartClient.class.getResource("rename-view.fxml"));
         Scene sceneRename = new Scene(fxmlLoader.load());
-        Stage renameStage = new Stage();
         renameStage = new Stage();
         renameStage.setScene(sceneRename);
         renameStage.setTitle("Изменение никнейма");
@@ -79,10 +79,9 @@ public class StartClient extends Application {
 
         controller = fxmlLoader.getController();
         controller.setNetwork(network);
-
-    }
-    public void closeRename(){
-        renameStage.close();
+        if (controller.changeUsername()){
+            renameStage.close();
+        }
     }
 
     public static void windowAbout(Stage stageAbout) throws IOException {
