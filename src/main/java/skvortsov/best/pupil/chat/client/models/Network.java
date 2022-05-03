@@ -27,7 +27,7 @@ public class Network {
 
 
     private final String DEFAULT_HOST = "localhost";
-    private final int DEFAULT_PORT = 8888;
+    private final int DEFAULT_PORT = 8187;
     private final String host;
     private final int port;
     private Socket socket;
@@ -36,6 +36,7 @@ public class Network {
     private DataOutputStream out;
     private String username;
     private StartClient startClient;
+    private String login;
 
 
     public Network() {
@@ -164,8 +165,17 @@ public class Network {
         return username;
     }
 
+    public void setLogin(String login) {
+        this.login = login;
+        System.out.println(login);
+    }
+
     public void sendPrivateMessage(String selectedRecipient, String msg) {
         sendMessage(String.format("%s %s %s", PRIVATE_MSG_CMD_PREFIX, selectedRecipient, msg));
     }
 
+    public String getLogin() {
+        System.out.println(this.login);
+        return login;
+    }
 }

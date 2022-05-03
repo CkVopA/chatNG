@@ -29,7 +29,8 @@ public class StartClient extends Application {
         network.connect();
 
         openAuthDialog();
-        createChatDialog();
+
+      //  createChatDialog();
     }
 
     private void openRegOrAuthDialog() {
@@ -37,7 +38,7 @@ public class StartClient extends Application {
     }
 
     private void openAuthDialog() throws IOException {
-        FXMLLoader authLoader = new FXMLLoader(StartClient.class.getResource("auth-view.fxml"));
+        FXMLLoader authLoader = new FXMLLoader(StartClient.class.getResource("view_files/auth-view.fxml"));
         Scene scene = new Scene(authLoader.load());
         authStage = new Stage();
         authStage.setScene(scene);
@@ -51,8 +52,8 @@ public class StartClient extends Application {
         authController.setStartClient(this);
     }
 
-    private void createChatDialog() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(StartClient.class.getResource("chat-view.fxml"));
+    public void createChatDialog() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(StartClient.class.getResource("view_files/chat-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         primaryStage.setScene(scene);
 
@@ -61,7 +62,7 @@ public class StartClient extends Application {
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(StartClient.class.getResource(fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(StartClient.class.getResource("view_files/"+ fxml + ".fxml"));
         return fxmlLoader.load();
     }
     public static void windowAbout(Stage stageAbout) throws IOException {
@@ -81,7 +82,9 @@ public class StartClient extends Application {
         primaryStage.show();
         primaryStage.setTitle("Chat NextGEN!");
         network.waitMessage(chatController);
-        chatController.setUsernameLabel(network.getUsername());
+
+        chatController.setUsernameLabel(network.getUsername()); // Зачем вызывать здесь когда можно просто из конртоллера...
+
     }
 
     public void showErrorAlert(String title, String errorMessage){

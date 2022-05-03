@@ -1,6 +1,5 @@
 package skvortsov.best.pupil.chat.client.controllers;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,10 +10,13 @@ import javafx.stage.Stage;
 import skvortsov.best.pupil.chat.client.StartClient;
 import skvortsov.best.pupil.chat.client.models.Network;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.text.DateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.ResourceBundle;
 
 public class ChatController implements Initializable {
 
@@ -37,7 +39,11 @@ public class ChatController implements Initializable {
 
     );
 
+    private final File libDir = new File("src/main/resources/skvortsov/best/pupil/chat/client/chat_history");
+
     private String selectedRecipient;
+    private File fileHistory;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         sendButton.setOnAction(actionEvent -> sendMessage());
@@ -45,6 +51,18 @@ public class ChatController implements Initializable {
         contactsList.setItems(contacts);
 
         chooseContactsListForPrivateMessage();
+    }
+
+
+    public void checkFileHistory(String login) {
+        fileHistory = new File(libDir, "history_[" + login + "].txt");
+        if (!fileHistory.exists()){
+            try {
+                fileHistory.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void chooseContactsListForPrivateMessage() {
@@ -89,18 +107,58 @@ public class ChatController implements Initializable {
         chatList.appendText(System.lineSeparator());
         chatList.appendText(msg);
         chatList.appendText(System.lineSeparator());
+        chatList.appendText(System.lineSeparator());
+
+        String msgForHistory = timeStamp + "\n"+ msg;
+        writeMessageInHistory(msgForHistory, fileHistory);
     }
 
     public void appendServerMessage(String serverMessage) {
+        chatList.appendText(System.lineSeparator());
         chatList.appendText(System.lineSeparator());
         chatList.appendText(">>> "+ serverMessage + " <<<");
         chatList.appendText(System.lineSeparator());
         chatList.appendText(System.lineSeparator());
     }
 
+    private void writeMessageInHistory(String msgForHistory, File fileHistory) {
+        checkFileHistory(network.getLogin());
+        try (FileWriter writer = new FileWriter(fileHistory, true)){
+            writer.write(msgForHistory);
+            writer.append('\n');
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
-    public void clearChatList(){
+    public void readAllHistory(){
+        try (FileReader reader = new FileReader(fileHistory)){
+            char[] buf = new char[256];
+            int c;
+            while((c = reader.read(buf))>0){
+
+                if(c < 256){
+                    buf = Arrays.copyOf(buf, c);
+                }
+                chatList.appendText(String.valueOf(buf));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void clearChatList(){  // придётся переименовать - очистить поле чата
         chatList.clear();
+    }
+    @FXML
+    public void clearHistory(){  // и создать ещё один метод по очистке файла истории
+        fileHistory.delete();
+      //  checkFileHistory(network.getLogin());
     }
 
     @FXML
@@ -134,4 +192,25 @@ public class ChatController implements Initializable {
         Collections.addAll(contactsList.getItems(), users);
 
     }
+
+
+
+
+    /*@FXML
+    public void getHistory(File fileHistory){
+        System.out.println("Дошло до сюда?");
+        String filepath = fileHistory.getPath();
+        try (FileInputStream fis = new FileInputStream(filepath)){
+            int length = (int) new File(filepath).length();
+            byte[] buffer = new byte[length];
+            fis.read(buffer, 0, length);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }*/
+
+
+
 }

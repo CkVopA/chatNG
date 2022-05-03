@@ -106,7 +106,6 @@ public class ClientHandler {
 
     private void joiningClient() throws IOException {
         myServer.subscribe(this);
-        myServer.sendOnlineMessage(this);
     }
 
     public String getUsername() {
@@ -164,7 +163,9 @@ public class ClientHandler {
     }
 
     public void sendMessageForAll(String sender, String message) throws IOException {
-        out.writeUTF(String.format("[%s]: %s ", sender, message));
+        String msg = String.format("[%s]: %s ", sender, message);
+        myServer.saveMessageInHistory(msg);
+        out.writeUTF(msg);
     }
 
     private void readAndSendPrivateMessage(String message) throws IOException {
@@ -172,11 +173,13 @@ public class ClientHandler {
         String recipient = partsPrivateMessage[1];
         String privateMessage = partsPrivateMessage[2];
         System.out.println("Received private msg for ["+ recipient+"]");
-        out.writeUTF("Me for ["+ recipient+"]: { "+ privateMessage +" }");
+        String msg = "Me for ["+ recipient+"]: { "+ privateMessage +" }";
+        myServer.saveMessageInHistory(msg);
+        out.writeUTF(msg);
         myServer.privateMessage(this, recipient, privateMessage);
     }
 
-    public void sendMessagePrivate(String senderName, String message) throws IOException {
+    public void sendPrivateMessage(String senderName, String message) throws IOException {
         out.writeUTF(String.format("[%s]: * { %s }",senderName.toUpperCase(),message));
     }
 
@@ -196,4 +199,5 @@ public class ClientHandler {
         String msg = String.format("%s %s %s", CHANGING_USERNAME_CMD_PREFIX, oldUsername, newUsername);
         out.writeUTF(msg);
     }
+
 }
