@@ -29,6 +29,8 @@ public class StartClient extends Application {
         network.connect();
 
         openAuthDialog();
+
+      //  createChatDialog();
     }
 
     private void openRegOrAuthDialog() {

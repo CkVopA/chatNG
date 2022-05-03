@@ -51,8 +51,8 @@ public class ChatController implements Initializable {
         contactsList.setItems(contacts);
 
         chooseContactsListForPrivateMessage();
-
     }
+
 
     public void checkFileHistory(String login) {
         fileHistory = new File(libDir, "history_[" + login + "].txt");
@@ -126,7 +126,7 @@ public class ChatController implements Initializable {
         try (FileWriter writer = new FileWriter(fileHistory, true)){
             writer.write(msgForHistory);
             writer.append('\n');
-           // writer.flush();
+            writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -158,7 +158,7 @@ public class ChatController implements Initializable {
     @FXML
     public void clearHistory(){  // и создать ещё один метод по очистке файла истории
         fileHistory.delete();
-        checkFileHistory(network.getLogin());
+      //  checkFileHistory(network.getLogin());
     }
 
     @FXML

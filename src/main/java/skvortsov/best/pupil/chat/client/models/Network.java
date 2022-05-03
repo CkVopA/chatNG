@@ -175,6 +175,7 @@ public class Network {
     }
 
     public String getLogin() {
+        System.out.println(this.login);
         return login;
     }
 }
