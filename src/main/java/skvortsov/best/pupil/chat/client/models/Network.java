@@ -27,7 +27,7 @@ public class Network {
 
 
     private final String DEFAULT_HOST = "localhost";
-    private final int DEFAULT_PORT = 8186;
+    private final int DEFAULT_PORT = 8187;
     private final String host;
     private final int port;
     private Socket socket;
