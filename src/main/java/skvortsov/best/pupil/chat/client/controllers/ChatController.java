@@ -113,6 +113,7 @@ public class ChatController implements Initializable {
     @FXML
     public void setUsernameLabel(String username){
         this.usernameLabel.setText(username);
+
     }
 
     @FXML

@@ -24,6 +24,7 @@ public class RenameController {
         newUsername = nameField.getText().trim();
         if (!newUsername.isBlank()) {
             network.sendNewUsername(newUsername);
+            nameField.clear();
             return true;
         } else return false;
     }

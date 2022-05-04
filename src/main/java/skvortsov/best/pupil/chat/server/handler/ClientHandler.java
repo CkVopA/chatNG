@@ -152,11 +152,10 @@ public class ClientHandler {
                         myServer.sendServerMessageForAllButOne(this,
                                 String.format("Пользователь [ %s ] сменил никнейм на [ %s ]", oldUsername, newUsername));
                         this.username = newUsername;
-                        myServer.refreshContactsList();
                         auth.endAuthentication();
                         myServer.sendNewUsername(oldUsername, newUsername);
+                        myServer.refreshContactsList();
                     }
-
                 } else {
                     myServer.broadcastMessage(message, this);
                     out.writeUTF("Me: " + message);
