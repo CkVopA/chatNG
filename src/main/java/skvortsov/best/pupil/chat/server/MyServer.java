@@ -38,7 +38,6 @@ public class MyServer {
 
     private void waitAndProcessNewClientConnection() throws IOException {
         Socket clientSocket = waitingClientConnection();
-
         processClientConnection(clientSocket);
     }
 

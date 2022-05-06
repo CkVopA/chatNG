@@ -69,9 +69,9 @@ public class StartClient extends Application {
         return fxmlLoader.load();
     }
 
-    // static или нет????
+
     public void openRename(Network network) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(StartClient.class.getResource("rename-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(StartClient.class.getResource("view_files/rename-view.fxml"));
         Scene sceneRename = new Scene(fxmlLoader.load());
         renameStage = new Stage();
         renameStage.setScene(sceneRename);
@@ -102,9 +102,7 @@ public class StartClient extends Application {
         primaryStage.show();
         primaryStage.setTitle("Chat NextGEN!");
         network.waitMessage(chatController);
-
-        chatController.setUsernameLabel(network.getUsername()); // Зачем вызывать здесь когда можно просто из конртоллера...
-
+        chatController.setUsernameLabel(network.getUsername());
     }
 
     public void showErrorAlert(String title, String errorMessage){
