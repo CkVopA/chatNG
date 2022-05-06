@@ -167,6 +167,7 @@ public class ChatController implements Initializable {
     @FXML
     public void setUsernameLabel(String username){
         this.usernameLabel.setText(username);
+
     }
 
     @FXML
@@ -188,7 +189,12 @@ public class ChatController implements Initializable {
         }
         contactsList.getItems().clear();
         Collections.addAll(contactsList.getItems(), users);
+    }
 
+    @FXML
+    public void changeUsername() throws IOException {
+        StartClient startClient = new StartClient();
+        startClient.openRename(network);
     }
 
 

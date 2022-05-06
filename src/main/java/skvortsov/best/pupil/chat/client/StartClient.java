@@ -9,6 +9,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import skvortsov.best.pupil.chat.client.controllers.AuthController;
 import skvortsov.best.pupil.chat.client.controllers.ChatController;
+import skvortsov.best.pupil.chat.client.controllers.RenameController;
 import skvortsov.best.pupil.chat.client.models.Network;
 
 import java.io.IOException;
@@ -19,6 +20,8 @@ public class StartClient extends Application {
     private Stage primaryStage;
     private Stage authStage;
     private ChatController chatController;
+    private RenameController controller;
+    private Stage renameStage;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -65,6 +68,23 @@ public class StartClient extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(StartClient.class.getResource("view_files/"+ fxml + ".fxml"));
         return fxmlLoader.load();
     }
+
+    // static или нет????
+    public void openRename(Network network) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(StartClient.class.getResource("rename-view.fxml"));
+        Scene sceneRename = new Scene(fxmlLoader.load());
+        renameStage = new Stage();
+        renameStage.setScene(sceneRename);
+        renameStage.setTitle("Изменение никнейма");
+        renameStage.show();
+
+        controller = fxmlLoader.getController();
+        controller.setNetwork(network);
+        if (controller.changeUsername()){
+            renameStage.close();
+        }
+    }
+
     public static void windowAbout(Stage stageAbout) throws IOException {
         Scene sceneAbout = new Scene(loadFXML("aboutWindow"));
         stageAbout.setScene(sceneAbout);
