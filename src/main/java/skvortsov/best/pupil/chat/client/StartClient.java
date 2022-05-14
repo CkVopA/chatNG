@@ -11,6 +11,9 @@ import skvortsov.best.pupil.chat.client.controllers.AuthController;
 import skvortsov.best.pupil.chat.client.controllers.ChatController;
 import skvortsov.best.pupil.chat.client.controllers.RenameController;
 import skvortsov.best.pupil.chat.client.models.Network;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.io.IOException;
 
@@ -23,6 +26,7 @@ public class StartClient extends Application {
     private RenameController controller;
     private Stage renameStage;
 
+    public static final Logger logger = LoggerFactory.getLogger(StartClient.class);
     @Override
     public void start(Stage stage) throws IOException {
 
@@ -53,6 +57,7 @@ public class StartClient extends Application {
         AuthController authController = authLoader.getController();
         authController.setNetwork(network);
         authController.setStartClient(this);
+        logger.info("Открыто окно аутентификации");
     }
 
     public void createChatDialog() throws IOException {
@@ -77,6 +82,7 @@ public class StartClient extends Application {
         renameStage.setScene(sceneRename);
         renameStage.setTitle("Изменение никнейма");
         renameStage.show();
+        logger.debug("Открыто окно изменения никнейма");
 
         controller = fxmlLoader.getController();
         controller.setNetwork(network);
@@ -110,5 +116,6 @@ public class StartClient extends Application {
         alert.setTitle(title);
         alert.setHeaderText(errorMessage);
         alert.show();
+        logger.error("Вызван ALERT: {} - {}",title,errorMessage);
     }
 }

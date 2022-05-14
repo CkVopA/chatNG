@@ -99,7 +99,7 @@ public class ChatController implements Initializable {
             }
         }
     }
-
+@FXML
     public void appendMessage(String msg) {
         String timeStamp = DateFormat.getInstance().format(new Date());
         chatList.appendText(timeStamp);
@@ -111,7 +111,7 @@ public class ChatController implements Initializable {
         String msgForHistory = timeStamp + "\n"+ msg;
         writeMessageInHistory(msgForHistory, fileHistory);
     }
-
+@FXML
     public void appendServerMessage(String serverMessage) {
         chatList.appendText(System.lineSeparator());
         chatList.appendText(System.lineSeparator());
@@ -119,7 +119,7 @@ public class ChatController implements Initializable {
         chatList.appendText(System.lineSeparator());
         chatList.appendText(System.lineSeparator());
     }
-
+@FXML
     private void writeMessageInHistory(String msgForHistory, File fileHistory) {
         checkFileHistory(network.getLogin());
         try (FileWriter writer = new FileWriter(fileHistory, true)){

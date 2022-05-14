@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+    
+    <appender name="adminFileAppender" class="org.apache.log4j.RollingFileAppender">
+        <param name="maxFileSize" value="1MB"/>
+        <param name="maxBackupIndex" value="2"/>
+        <param name="file" value="src/main/resources/logs/admin_logfile.log"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                   value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1} - %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                   value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1} - %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+        <!-- установить минимальный уровень вывода журнала-->
+        <param name="levelMin" value="DEBUG"/>
+        <!-- установить максимальный уровень вывода журнала-->
+        <param name="levelMax" value="ERROR"/>
+        </filter>
+    </appender>
+
+    <category name="skvortsov.best.pupil.chat">
+        <!-- all, trace, debug, info, warn, error, fatal -->
+        <priority value="debug"/>
+        <appender-ref ref="adminFileAppender"/>
+        <appender-ref ref="stdout"/>
+    </category>
+
+</log4j:configuration>
