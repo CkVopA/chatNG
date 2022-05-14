@@ -164,7 +164,7 @@ public class ClientHandler {
 
     public void sendMessageForAll(String sender, String message) throws IOException {
         String msg = String.format("[%s]: %s ", sender, message);
-        myServer.saveMessageInHistory(msg);
+//        myServer.saveMessageInHistory(msg);
         out.writeUTF(msg);
     }
 
@@ -174,7 +174,7 @@ public class ClientHandler {
         String privateMessage = partsPrivateMessage[2];
         System.out.println("Received private msg for ["+ recipient+"]");
         String msg = "Me for ["+ recipient+"]: { "+ privateMessage +" }";
-        myServer.saveMessageInHistory(msg);
+ //       myServer.saveMessageInHistory(msg);
         out.writeUTF(msg);
         myServer.privateMessage(this, recipient, privateMessage);
     }
@@ -199,5 +199,4 @@ public class ClientHandler {
         String msg = String.format("%s %s %s", CHANGING_USERNAME_CMD_PREFIX, oldUsername, newUsername);
         out.writeUTF(msg);
     }
-
 }

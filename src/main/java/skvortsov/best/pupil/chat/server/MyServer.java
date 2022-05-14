@@ -15,8 +15,8 @@ public class MyServer {
     private final ServerSocket serverSocket;
     private final AuthenticationService authenticationService;
     private final List<ClientHandler> clients;
-    private String filePath = "src/main/resources/skvortsov/best/pupil/chat/server/historyMessages/historyChat.txt";
-    private File fileHistoryChat = new File(filePath);
+//    private String filePath = "src/main/resources/skvortsov/best/pupil/chat/server/historyMessages/historyChat.txt";
+//    private File fileHistoryChat = new File(filePath);
 
     public MyServer(int port) throws IOException {
         serverSocket = new ServerSocket(port);
@@ -147,7 +147,7 @@ public class MyServer {
         }
     }
 
-    public void saveMessageInHistory(String msg) throws IOException {
+    /*public void saveMessageInHistory(String msg) throws IOException {
         if (!fileHistoryChat.exists() ){
             fileHistoryChat.createNewFile();
         } else {
@@ -160,5 +160,5 @@ public class MyServer {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 }
