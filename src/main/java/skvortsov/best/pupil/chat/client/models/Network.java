@@ -1,6 +1,8 @@
 package skvortsov.best.pupil.chat.client.models;
 
 import javafx.application.Platform;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import skvortsov.best.pupil.chat.client.StartClient;
 import skvortsov.best.pupil.chat.client.controllers.ChatController;
 import skvortsov.best.pupil.chat.client.controllers.RenameController;
@@ -11,6 +13,8 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class Network {
+
+    public static final Logger logger = LoggerFactory.getLogger(Network.class);
 
     private static final String AUTH_CMD_PREFIX = "/auth"; // + login + password
     private static final String AUTHOK_CMD_PREFIX = "/authok"; // + userName
@@ -24,8 +28,6 @@ public class Network {
     private static final String OFFLINE_CLIENT_CMD_PREFIX = "/coff";  // + userName
     private static final String RENAME_USER_CMD_PREFIX = "/rnm";  // + new username
     private static final String CHANGING_USERNAME_CMD_PREFIX = "/chgusn";  // + oldUsername + newUsername
-
-
 
     private final String DEFAULT_HOST = "localhost";
     private final int DEFAULT_PORT = 8187;
@@ -57,17 +59,19 @@ public class Network {
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
             System.out.println("Connection is successful");
+            logger.info("Установлено соединение с сервером");
 
         } catch (IOException e) {
             e.printStackTrace();
             startClient.showErrorAlert("Ошибка связи!", "Соединение потеряно!");
-            System.out.println("Connection failed");
+            logger.error(e.getMessage(), "Потеряно соединение с сервером!");
         }
     }
 
     public void sendMessage(String msg){
         try {
             out.writeUTF(msg);
+            logger.trace("Сообщение отправлено на сервер");
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -76,7 +80,7 @@ public class Network {
         } catch (IOException e) {
             e.printStackTrace();
             startClient.showErrorAlert("Ошибка!", "Сообщение не передано!");
-            System.out.println("Message is not send");
+            logger.error(e.getMessage(), "Не удалось отправить сообщение!");
         }
     }
 
@@ -106,6 +110,7 @@ public class Network {
                         String[] users = msg.split(", ");
 
                         Platform.runLater(()-> chatController.updateContactsList(users));
+                        logger.trace("Обновлён список контактов");
 
                     } else if (msg.startsWith(CHANGING_USERNAME_CMD_PREFIX)){
 
@@ -116,6 +121,7 @@ public class Network {
                             Platform.runLater(()-> {
                                 chatController.setUsernameLabel(newUsername);
                             });
+                            logger.info("Никнейм [{}] изменён на [{}]", oldUsername, newUsername);
                         }
                     }
                     else {
@@ -124,7 +130,7 @@ public class Network {
                             chatController.appendMessage(finalMsg);
                         });
                     }
-                    System.out.println(msg);
+                    logger.info("[Сообщение] {}", msg);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -140,10 +146,9 @@ public class Network {
             return true;
         }
         else {
-            System.out.println("Ошибка изменения имени!");
+            logger.error("Ошибка изменения никнейма!");
             return false;
         }
-
     }
 
     public String sendAuthMessage(String login, String password) {
@@ -157,7 +162,7 @@ public class Network {
                 return response.split("\\s+",2)[1];
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             return e.getMessage();
         }
     }
@@ -168,11 +173,9 @@ public class Network {
 
     public void setLogin(String login) {
         this.login = login;
-        System.out.println(login);
     }
 
     public String getLogin() {
-        System.out.println(this.login);
         return login;
     }
 

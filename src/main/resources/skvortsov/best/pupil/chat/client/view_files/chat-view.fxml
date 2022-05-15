@@ -40,7 +40,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#clearChatList" text="Очистить поле чата" />
                 <MenuItem mnemonicParsing="false" onAction="#readAllHistory" text="Показать всю историю чата" />
                 <MenuItem mnemonicParsing="false" onAction="#changeUsername" text="Изменить свой никнейм" />
-                <MenuItem mnemonicParsing="false" onAction="#deleteFileHistory" text="Очистить историю переписки" />
+                <MenuItem mnemonicParsing="false" onAction="#clearFileHistory" text="Очистить историю переписки" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Помощь">

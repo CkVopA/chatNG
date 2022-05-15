@@ -1,6 +1,7 @@
 package skvortsov.best.pupil.chat.client;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -57,7 +58,7 @@ public class StartClient extends Application {
         AuthController authController = authLoader.getController();
         authController.setNetwork(network);
         authController.setStartClient(this);
-        logger.info("Открыто окно аутентификации");
+        logger.trace("Открыто окно аутентификации");
     }
 
     public void createChatDialog() throws IOException {
@@ -82,7 +83,6 @@ public class StartClient extends Application {
         renameStage.setScene(sceneRename);
         renameStage.setTitle("Изменение никнейма");
         renameStage.show();
-        logger.debug("Открыто окно изменения никнейма");
 
         controller = fxmlLoader.getController();
         controller.setNetwork(network);
@@ -109,6 +109,9 @@ public class StartClient extends Application {
         primaryStage.setTitle("Chat NextGEN!");
         network.waitMessage(chatController);
         chatController.setUsernameLabel(network.getUsername());
+        Platform.runLater(()-> {
+            chatController.checkFileHistory(network.getLogin());
+        });
     }
 
     public void showErrorAlert(String title, String errorMessage){
