@@ -1,5 +1,7 @@
 package skvortsov.best.pupil.chat.server.handler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import skvortsov.best.pupil.chat.server.MyServer;
 import skvortsov.best.pupil.chat.server.authentication.AuthenticationService;
 import skvortsov.best.pupil.chat.server.authentication.DB_Authentication;
@@ -31,7 +33,14 @@ public class ClientHandler {
     private static final String RENAME_USER_CMD_PREFIX = "/rnm";  // + new username
     private static final String CHANGING_USERNAME_CMD_PREFIX = "/chgusn";  // + oldUsername + newUsername
     private String username;
+
+    public String getLogin() {
+        return login;
+    }
+
     private String login;
+
+    public static final Logger logger = LoggerFactory.getLogger(ClientHandler.class);
 
     public ClientHandler(MyServer myServer, Socket socket) {
         this.myServer = myServer;
@@ -92,10 +101,8 @@ public class ClientHandler {
                 return false;
             }
             out.writeUTF(String.format("%s %s", AUTHOK_CMD_PREFIX, username));
-
             auth.endAuthentication();
             joiningClient();
-
             return true;
         }
         else {
@@ -115,8 +122,7 @@ public class ClientHandler {
     private void readMessage() throws IOException {
         while (true){
                 String message = inS.readUTF();
-
-                System.out.println("Message from ["+ getUsername()+ "] | - "+ message);
+        //        logger.info("Сообщение от пользователя {}", getUsername());
                 if (message.startsWith(STOP_SERVER_CMD_PREFIX)){
                     out.writeUTF(message);
                     out.writeUTF("You are stopped this server!\n" +
@@ -124,7 +130,7 @@ public class ClientHandler {
 
                     String msg = "Client [" + this.getUsername() + "] stopped this server.\n" +
                             "Connection is lost!";
-                    System.out.println(msg);
+                    logger.info(msg);
                     myServer.sendServerMessageForAllButOne(this, msg);
 
                     System.exit(0);
@@ -140,7 +146,6 @@ public class ClientHandler {
                 }  else if (message.startsWith(PRIVATE_MSG_CMD_PREFIX)){
                     readAndSendPrivateMessage(message);
                 } else if (message.startsWith(RENAME_USER_CMD_PREFIX)){
-                    System.out.println("Пришла переименовка!");
                     String[] parts = message.split("\\s+",2);
                     String newUsername = parts[1];
                     String oldUsername = this.getUsername();
@@ -148,9 +153,10 @@ public class ClientHandler {
                     AuthenticationService auth = new DB_Authentication();
                     auth.startAuthentication();
                     if (auth.changeUsername(newUsername, login)) {
-                        myServer.sendServerMessageForAllButOne(this,
-                                String.format("Пользователь [ %s ] сменил никнейм на [ %s ]", oldUsername, newUsername));
+                        String msg = String.format("Пользователь [ %s ] сменил никнейм на [ %s ]", oldUsername, newUsername);
+                        myServer.sendServerMessageForAllButOne(this, msg);
                         this.username = newUsername;
+                        logger.info(msg);
                         auth.endAuthentication();
                         myServer.sendNewUsername(oldUsername, newUsername);
                         myServer.refreshContactsList();
@@ -172,8 +178,8 @@ public class ClientHandler {
         String[] partsPrivateMessage = message.split("\\s+",3);
         String recipient = partsPrivateMessage[1];
         String privateMessage = partsPrivateMessage[2];
-        System.out.println("Received private msg for ["+ recipient+"]");
         String msg = "Me for ["+ recipient+"]: { "+ privateMessage +" }";
+        logger.info("От пользователя [{}] отправлено приватное сообщение для [{}]", this.login, recipient);
  //       myServer.saveMessageInHistory(msg);
         out.writeUTF(msg);
         myServer.privateMessage(this, recipient, privateMessage);
@@ -190,7 +196,6 @@ public class ClientHandler {
     public void sendClientsList(List<ClientHandler> clientsOnline) throws IOException {
         String msg = String.format("%s %s", REFRESH_CLIENTS_LIST_CMD_PREFIX, clientsOnline.toString());
         out.writeUTF(msg);
-        System.out.println(msg);
     }
     @Override
     public String toString(){return  username;}

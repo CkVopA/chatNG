@@ -1,5 +1,8 @@
 package skvortsov.best.pupil.chat.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import skvortsov.best.pupil.chat.ServerAPP;
 import skvortsov.best.pupil.chat.server.authentication.AuthenticationService;
 import skvortsov.best.pupil.chat.server.authentication.DB_Authentication;
 import skvortsov.best.pupil.chat.server.handler.ClientHandler;
@@ -15,6 +18,7 @@ public class MyServer {
     private final ServerSocket serverSocket;
     private final AuthenticationService authenticationService;
     private final List<ClientHandler> clients;
+    public static final Logger logger = LoggerFactory.getLogger(MyServer.class);
 //    private String filePath = "src/main/resources/skvortsov/best/pupil/chat/server/historyMessages/historyChat.txt";
 //    private File fileHistoryChat = new File(filePath);
 
@@ -25,7 +29,7 @@ public class MyServer {
     }
 
     public void start() {
-        System.out.println("Server started!");
+        logger.info("Сервер работает...");
         System.out.println("------------------");
         try {
             while (true) {
@@ -43,9 +47,9 @@ public class MyServer {
 
     private Socket waitingClientConnection() throws IOException {
         while (true) {
-            System.out.println("Waiting clients...");
+            logger.info("Ожидание подключения пользователей . . .");
             Socket clientSocket = serverSocket.accept();
-            System.out.println("Client connected!");
+            logger.info("Пользователь подключился к серверу.");
             return clientSocket;
         }
     }
@@ -70,13 +74,13 @@ public class MyServer {
 
     public synchronized void subscribe(ClientHandler clientHandler) throws IOException {
         clients.add(clientHandler);
-        System.out.println(clients);
+        logger.info("Пользователь +{}+ зашёл в чат", clientHandler.getUsername());
         sendOnlineMessage(clientHandler);
     }
 
     public synchronized void unSubscribe(ClientHandler clientHandler) {
         clients.remove(clientHandler);
-        System.out.println(clients);
+        logger.info("Пользователь [{}] покинул чат", clientHandler.getUsername());
     }
 
     public synchronized void broadcastMessage(String message, ClientHandler sender) throws IOException {
@@ -107,7 +111,7 @@ public class MyServer {
             }
             client.sendServerMessage(msg);
         }
-        System.out.println(msg);
+        logger.trace(msg);
     }
 
     public synchronized void sendOfflineMessage(ClientHandler clientOff) throws IOException {
@@ -119,7 +123,7 @@ public class MyServer {
             client.sendServerMessage(msg);
             client.sendClientsList(clients);
         }
-        System.out.println(msg);
+        logger.trace(msg);
     }
 
     public synchronized void sendServerMessageForAllButOne(ClientHandler sender, String msg) throws IOException {
@@ -129,11 +133,11 @@ public class MyServer {
             }
             client.sendServerMessage(msg);
         }
-        System.out.println(msg);
+        logger.trace(msg);
     }
 
     public synchronized void refreshContactsList() throws IOException {
-        System.out.println("Обновление списка пользователей в сети.");
+        logger.debug("Обновление списка пользователей в сети");
         for (ClientHandler client : clients) {
             client.sendClientsList(clients);
         }

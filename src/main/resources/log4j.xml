@@ -3,10 +3,10 @@
 <log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
 
 
-    <!-- аппендер для вывода в файл -->
+    <!-- аппендер для вывода в файл на клиенте-->
     <appender name="adminFileAppender" class="org.apache.log4j.RollingFileAppender">
         <param name="maxFileSize" value="1MB"/>         <!-- установить макс размер файла -->
-        <param name="maxBackupIndex" value="2"/>        <!-- установить макс кол-во файлов -->
+        <param name="maxBackupIndex" value="1"/>        <!-- установить макс кол-во файлов -->
         <param name="file" value="src/main/resources/skvortsov/best/pupil/chat/client/logs/logFiles/admin_Client_logfile.log"/>
 
         <layout class="org.apache.log4j.PatternLayout">
@@ -15,11 +15,29 @@
         </layout>
         <filter class="org.apache.log4j.varia.LevelRangeFilter">
         <!-- установить минимальный уровень вывода журнала-->
+        <param name="levelMin" value="DEBUG"/>
+        <!-- установить максимальный уровень вывода журнала-->
+        <param name="levelMax" value="FATAL"/>
+    </filter>
+    </appender>
+
+    <!-- аппендер для вывода в файл на сервере-->
+    <appender name="adminServerFile" class="org.apache.log4j.RollingFileAppender">
+        <param name="maxFileSize" value="2MB"/>         <!-- установить макс размер файла -->
+        <param name="maxBackupIndex" value="3"/>        <!-- установить макс кол-во файлов -->
+        <param name="file" value="src/main/resources/skvortsov/best/pupil/chat/server/logs/logFiles/admin_server.log"/>
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                   value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1} - %m%n"/>
+        </layout>
+
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+        <!-- установить минимальный уровень вывода журнала-->
         <param name="levelMin" value="TRACE"/>
         <!-- установить максимальный уровень вывода журнала-->
         <param name="levelMax" value="FATAL"/>
     </filter>
-
     </appender>
 
     <!-- аппендер для вывода в консоль -->
@@ -36,10 +54,16 @@
         </filter>
     </appender>
 
-    <category name="skvortsov.best.pupil.chat">
+    <category name="skvortsov.best.pupil.chat.client">
+        <!-- all, trace, debug, info, warn, error, fatal -->
+        <priority value="info"/>
+        <appender-ref ref="adminFileAppender"/>
+    </category>
+
+    <category name="skvortsov.best.pupil.chat.server">
         <!-- all, trace, debug, info, warn, error, fatal -->
         <priority value="ALL"/>
-        <appender-ref ref="adminFileAppender"/>
+        <appender-ref ref="adminServerFile"/>
         <appender-ref ref="stdout"/>
     </category>
 

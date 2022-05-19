@@ -1,12 +1,15 @@
 package skvortsov.best.pupil.chat.server.authentication;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.*;
 
 public class DB_Authentication implements AuthenticationService {
 
     private Connection connection;
     private Statement stmt;
-
+    public static final Logger logger = LoggerFactory.getLogger(DB_Authentication.class);
 
     @Override
     public void startAuthentication() {
@@ -18,12 +21,12 @@ public class DB_Authentication implements AuthenticationService {
     }
 
     private void connection() throws ClassNotFoundException, SQLException {
-        System.out.println("Подключение к базе данных . . .");
+        logger.info("Подключение к базе данных . . .");
         Class.forName("org.sqlite.JDBC");
         connection = DriverManager.getConnection("jdbc:sqlite:" +
                 "src/main/resources/skvortsov/best/pupil/chat/server/db/AUTH");
         stmt = connection.createStatement();
-        System.out.println("База подключена.");
+        logger.info("База данных подключена");
     }
 
     @Override
@@ -49,10 +52,6 @@ public class DB_Authentication implements AuthenticationService {
         }
         return false;
     }
-
-
-
-
 
     private  void disconnect() {
         closeStatement();
@@ -82,6 +81,6 @@ public class DB_Authentication implements AuthenticationService {
     @Override
     public void endAuthentication() {
         disconnect();
-        System.out.println("БД отключена.");
+        logger.info("База данных отключена.");
     }
 }
