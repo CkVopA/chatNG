@@ -164,6 +164,7 @@ public class ClientHandler {
                 } else {
                     myServer.broadcastMessage(message, this);
                     out.writeUTF("Me: " + message);
+                    logger.info("Пользователь [{}] отправил СООБЩЕНИЕ: <<{}>>", this.getUsername(), message);
                 }
         }
     }
@@ -179,7 +180,7 @@ public class ClientHandler {
         String recipient = partsPrivateMessage[1];
         String privateMessage = partsPrivateMessage[2];
         String msg = "Me for ["+ recipient+"]: { "+ privateMessage +" }";
-        logger.info("От пользователя [{}] отправлено приватное сообщение для [{}]", this.login, recipient);
+        logger.info("От пользователя [{}] отправлено приватное сообщение для [{}]", this.username, recipient);
  //       myServer.saveMessageInHistory(msg);
         out.writeUTF(msg);
         myServer.privateMessage(this, recipient, privateMessage);

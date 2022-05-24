@@ -21,12 +21,12 @@ public class DB_Authentication implements AuthenticationService {
     }
 
     private void connection() throws ClassNotFoundException, SQLException {
-        logger.info("Подключение к базе данных . . .");
+        logger.debug("Подключение к базе данных . . .");
         Class.forName("org.sqlite.JDBC");
         connection = DriverManager.getConnection("jdbc:sqlite:" +
                 "src/main/resources/skvortsov/best/pupil/chat/server/db/AUTH");
         stmt = connection.createStatement();
-        logger.info("База данных подключена");
+        logger.debug("База данных подключена");
     }
 
     @Override
@@ -81,6 +81,6 @@ public class DB_Authentication implements AuthenticationService {
     @Override
     public void endAuthentication() {
         disconnect();
-        logger.info("База данных отключена.");
+        logger.debug("База данных отключена.");
     }
 }
